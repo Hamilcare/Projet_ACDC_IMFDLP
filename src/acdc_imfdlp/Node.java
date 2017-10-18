@@ -1,10 +1,19 @@
 package acdc_imfdlp;
 
+/**
+ * Imports gestion de fichiers
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+/**
+ * Imports construction de l'arborescence
+ */
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+/**
+ * Import génération du hash
+ */
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -13,15 +22,37 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class Node implements INode, Runnable {
 
+    /**
+     * Variables membres
+     */
     private DefaultMutableTreeNode root;
     private File fileRoot;
     
+    /**
+     * Constructeur
+     * @param root Modèle d'arbre à initialiser
+     * @param fileRoot Répertoire source à initialiser
+     */
     public Node(DefaultMutableTreeNode root, File fileRoot) {
         
-        this.fileRoot = fileRoot;
         this.root = root;
+        this.fileRoot = fileRoot;
     }
     
+    /**
+     * Méthode appelée au démarrage du Thread
+     */
+    @Override
+    public void run() {
+        
+        createNode(root, fileRoot);
+    }
+    
+    /**
+     * Créé les noeuds à partir de la liste des fihciers et dossiers du répertoire source
+     * @param node Modèle d'arbre
+     * @param fileRoot Répertoire source
+     */
     private void createNode(DefaultMutableTreeNode node, File fileRoot) {
         
         File[] files = fileRoot.listFiles();
@@ -32,20 +63,17 @@ public class Node implements INode, Runnable {
         {
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new FileNode(file));
             node.add(childNode);
-            if (file.isDirectory())
-            {
+            if (file.isDirectory()) {
                 createNode(childNode, file);
             }
+            if (file.isFile()) {
+                try {
+                    System.out.println(file.getAbsolutePath() + " " + hash(file));
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            }
         }
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    public void run() {
-        
-        createNode(root, fileRoot);
     }
 
     /**
@@ -92,41 +120,45 @@ public class Node implements INode, Runnable {
     }
     
     /**
-     * 
-     * @param file
-     * @return 
+     * Retourne le nom d'un fichier ou d'un dossier
+     * @param file Fichier ou dossier
+     * @return  Nom
      */
+    @Override
     public String filename(File file) {
         
         return file.getName();
     }
 
     /**
-     * 
-     * @param file
-     * @return
-     * @throws IOException 
+     * Retourne le hash md5 d'un fichier
+     * @param file Fichier
+     * @return Hash md5 du fichier
+     * @throws IOException Erreur si l'on a par ex. pas les droits sur le fichier
      */
+    @Override
     public String hash(File file) throws IOException {
         
         return DigestUtils.md5Hex(new FileInputStream(file));
     }
 
     /**
-     * 
-     * @param file
-     * @return 
+     * Retourne le taille d'un fichier ou d'un dossier
+     * @param file Fichier ou dossier
+     * @return Taille
      */
+    @Override
     public long weight(File file) {
         
         return file.length();
     }
 
     /**
-     * 
-     * @param file
-     * @return 
+     * Retourne le chemin d'accès complet d'un fichier ou d'un dossuier
+     * @param file Fichier ou dossier
+     * @return Chemin d'accès complet
      */
+    @Override
     public String absolutePath(File file) {
         
         return file.getAbsolutePath();
@@ -151,24 +183,5 @@ public class Node implements INode, Runnable {
         
         return null;
     }
-
-    @Override
-    public String filename() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String hash() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public long weight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String absolutePath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
+

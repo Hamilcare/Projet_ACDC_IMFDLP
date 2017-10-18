@@ -1,5 +1,8 @@
 package acdc_imfdlp;
 
+/**
+ * Import gestion de fichiers
+ */
 import java.io.File;
 
 /**
@@ -8,13 +11,24 @@ import java.io.File;
  */
 public class FileNode {
 
+    /**
+     * Variable membre
+     */
     private File file;
 
+    /**
+     * Constructeur
+     * @param file Fichier ou dossier
+     */
     public FileNode(File file) {
         
         this.file = file;
     }
 
+    /**
+     * Amélioration de l'écriture du nom des fichiers et dossiers
+     * @return 
+     */
     @Override
     public String toString() {
         
