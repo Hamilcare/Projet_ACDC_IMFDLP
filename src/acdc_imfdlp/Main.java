@@ -54,12 +54,14 @@ public class Main extends JFrame implements Runnable {
         tree.setShowsRootHandles(true);
         JScrollPane scrollPane = new JScrollPane(tree);
         
+        String fileExt = "";
+        
         JButton btnSearch = new JButton("Search");
         btnSearch.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                explorer = new Thread(new Node(root, rootPath));
+                explorer = new Thread(new Node(root, rootPath, fileExt));
                 explorer.start();
             }
         });

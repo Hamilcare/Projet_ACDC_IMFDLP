@@ -5,7 +5,9 @@ package acdc_imfdlp;
  */
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.HashMap;
 /**
  * Imports construction de l'arborescence
  */
@@ -27,16 +29,21 @@ public class Node implements INode, Runnable {
      */
     private DefaultMutableTreeNode root;
     private File fileRoot;
+    private HashMap<File, String> md5Table;
+    private String fileExt = "";
     
     /**
      * Constructeur
      * @param root Modèle d'arbre à initialiser
      * @param fileRoot Répertoire source à initialiser
      */
-    public Node(DefaultMutableTreeNode root, File fileRoot) {
+    public Node(DefaultMutableTreeNode root, File fileRoot, String fileExt) {
         
         this.root = root;
         this.fileRoot = fileRoot;
+        this.fileExt = fileExt;
+        
+        md5Table = new HashMap<>();
     }
     
     /**
@@ -55,7 +62,13 @@ public class Node implements INode, Runnable {
      */
     private void createNode(DefaultMutableTreeNode node, File fileRoot) {
         
-        File[] files = fileRoot.listFiles();
+        File[] files;
+        
+        if (fileExt.equals("")) {
+            files = fileRoot.listFiles();
+        } else {
+            files = filter(fileRoot, fileExt);
+        }
         
         if (files == null) return;
 
@@ -68,9 +81,11 @@ public class Node implements INode, Runnable {
             }
             if (file.isFile()) {
                 try {
-                    System.out.println(file.getAbsolutePath() + " " + hash(file));
+                    md5Table.put(file, hash(file));
+                    //System.out.println(file.getAbsolutePath() + " " + hash(file));
+                    System.out.println(md5Table);
                 } catch (IOException e) {
-                    System.out.println(e);
+                    //System.out.println(e);
                 }
             }
         }
@@ -175,13 +190,20 @@ public class Node implements INode, Runnable {
     }
 
     /**
-     * 
+     * Méthode filtrant les fichiers par type
+     * @param fileRoot Répertoire racine à partir duquel lister les fichiers
+     * @param ext Exitension du fichier
      * @return 
      */
     @Override
-    public INode filter() {
+    public File[] filter(File fileRoot, String ext) {
         
-        return null;
+        return fileRoot.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File fileRoot, String ext) {
+                return ext.toLowerCase().endsWith(ext);
+            }
+        });
     }
 }
 
