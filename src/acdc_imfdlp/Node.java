@@ -4,10 +4,12 @@ package acdc_imfdlp;
  * Imports gestion de fichiers
  */
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import org.apache.commons.io.filefilter.*;
 /**
  * Imports construction de l'arborescence
  */
@@ -29,21 +31,21 @@ public class Node implements INode, Runnable {
      */
     private DefaultMutableTreeNode root;
     private File fileRoot;
-    private HashMap<File, String> md5Table;
+    private HashMap<String, ArrayList<File>> md5Table;
     private String fileExt = "";
     
     /**
      * Constructeur
      * @param root Modèle d'arbre à initialiser
      * @param fileRoot Répertoire source à initialiser
+     * @param fileExt Extension des fichiers à isoler lors du tri par type
      */
     public Node(DefaultMutableTreeNode root, File fileRoot, String fileExt) {
         
         this.root = root;
         this.fileRoot = fileRoot;
         this.fileExt = fileExt;
-        
-        md5Table = new HashMap<>();
+        this.md5Table = new HashMap<>();
     }
     
     /**
@@ -62,13 +64,11 @@ public class Node implements INode, Runnable {
      */
     private void createNode(DefaultMutableTreeNode node, File fileRoot) {
         
-        File[] files;
+        fileExt = "exe";
         
-        if (fileExt.equals("")) {
-            files = fileRoot.listFiles();
-        } else {
-            files = filter(fileRoot, fileExt);
-        }
+        String md5;
+        File[] files = filter(fileRoot, fileExt);
+        ArrayList<File> listFile = new ArrayList();
         
         if (files == null) return;
 
@@ -79,16 +79,24 @@ public class Node implements INode, Runnable {
             if (file.isDirectory()) {
                 createNode(childNode, file);
             }
-            if (file.isFile()) {
+            else if (file.isFile()) {
                 try {
-                    md5Table.put(file, hash(file));
-                    //System.out.println(file.getAbsolutePath() + " " + hash(file));
-                    System.out.println(md5Table);
+                    md5 = hash(file);
+                    if(!md5Table.containsKey(md5))
+                    {
+                        listFile = new ArrayList();
+                        listFile.add(file);
+                        md5Table.put(md5, listFile);
+                    }
+                    else {
+                        md5Table.get(md5).add(file);
+                    }
                 } catch (IOException e) {
                     //System.out.println(e);
                 }
             }
         }
+        System.out.println(md5Table);
     }
 
     /**
@@ -198,12 +206,8 @@ public class Node implements INode, Runnable {
     @Override
     public File[] filter(File fileRoot, String ext) {
         
-        return fileRoot.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File fileRoot, String ext) {
-                return ext.toLowerCase().endsWith(ext);
-            }
-        });
+        return fileRoot.listFiles((FileFilter) FileFilterUtils.orFileFilter(
+                (FileFilterUtils.suffixFileFilter(ext)), DirectoryFileFilter.DIRECTORY));
     }
 }
 

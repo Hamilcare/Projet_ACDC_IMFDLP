@@ -46,7 +46,7 @@ public class Main extends JFrame implements Runnable {
     @Override
     public void run() {
         
-        setRootPath("D:\\Users");
+        setRootPath("D:\\Users\\Cédric\\Downloads");
         root = new DefaultMutableTreeNode(rootPath);
         treeModel = new DefaultTreeModel(root);
 
