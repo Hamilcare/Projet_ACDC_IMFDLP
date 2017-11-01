@@ -34,5 +34,5 @@ public interface INode {
     
     public INode[] child();
     
-    public File[] filter(File fileRoot, String ext);
+    public File[] filter(File fileRoot);
 }

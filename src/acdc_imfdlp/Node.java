@@ -30,21 +30,27 @@ public class Node implements INode, Runnable {
      * Variables membres
      */
     private DefaultMutableTreeNode root;
-    private File fileRoot;
+    private File filePath;
     private HashMap<String, ArrayList<File>> md5Table;
-    private String fileExt = "";
+    private IOFileFilter[] filters;
+    
+    /**
+     * Constructeur par défaut
+     */
+    public Node() {
+        
+        this.md5Table = new HashMap<>();
+    }
     
     /**
      * Constructeur
      * @param root Modèle d'arbre à initialiser
-     * @param fileRoot Répertoire source à initialiser
-     * @param fileExt Extension des fichiers à isoler lors du tri par type
+     * @param filePath Répertoire source à initialiser
      */
-    public Node(DefaultMutableTreeNode root, File fileRoot, String fileExt) {
+    public Node(DefaultMutableTreeNode root, File filePath) {
         
         this.root = root;
-        this.fileRoot = fileRoot;
-        this.fileExt = fileExt;
+        this.filePath = filePath;
         this.md5Table = new HashMap<>();
     }
     
@@ -54,7 +60,7 @@ public class Node implements INode, Runnable {
     @Override
     public void run() {
         
-        createNode(root, fileRoot);
+        createNode(root, filePath);
     }
     
     /**
@@ -64,10 +70,8 @@ public class Node implements INode, Runnable {
      */
     private void createNode(DefaultMutableTreeNode node, File fileRoot) {
         
-        fileExt = "exe";
-        
         String md5;
-        File[] files = filter(fileRoot, fileExt);
+        File[] files = filter(fileRoot);
         ArrayList<File> listFile = new ArrayList();
         
         if (files == null) return;
@@ -76,10 +80,12 @@ public class Node implements INode, Runnable {
         {
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new FileNode(file));
             node.add(childNode);
-            if (file.isDirectory()) {
+            if (file.isDirectory() && file.length() != 0) {
                 createNode(childNode, file);
             }
             else if (file.isFile()) {
+                
+                //long start = System.nanoTime();
                 try {
                     md5 = hash(file);
                     if(!md5Table.containsKey(md5))
@@ -92,11 +98,13 @@ public class Node implements INode, Runnable {
                         md5Table.get(md5).add(file);
                     }
                 } catch (IOException e) {
-                    //System.out.println(e);
+                    
                 }
+                //long end = System.nanoTime();
+                //System.out.println((end - start));
             }
         }
-        System.out.println(md5Table);
+        //System.out.println(md5Table + "\n");
     }
 
     /**
@@ -139,7 +147,7 @@ public class Node implements INode, Runnable {
     @Override
     public DefaultTreeModel treeModel() {
         
-        return null;
+        return new DefaultTreeModel(this.root);
     }
     
     /**
@@ -196,18 +204,51 @@ public class Node implements INode, Runnable {
         
         return null;
     }
+    
+    /**
+     * Initialisation du répertoire source
+     * @param path Chemin d'accès
+     */
+    public void setFilePath(String path) {
+        
+        this.filePath = new File(path);
+    }
+    
+    /**
+     * Initialisation du DefaultMutableTreeNode
+     */
+    public void setRoot() {
+        
+        root = new DefaultMutableTreeNode(filePath);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public DefaultMutableTreeNode getRoot() {
+        
+        return this.root;
+    }
 
     /**
      * Méthode filtrant les fichiers par type
      * @param fileRoot Répertoire racine à partir duquel lister les fichiers
-     * @param ext Exitension du fichier
      * @return 
      */
     @Override
-    public File[] filter(File fileRoot, String ext) {
+    public File[] filter(File fileRoot) {
         
-        return fileRoot.listFiles((FileFilter) FileFilterUtils.orFileFilter(
-                (FileFilterUtils.suffixFileFilter(ext)), DirectoryFileFilter.DIRECTORY));
+        return fileRoot.listFiles((FileFilter) FileFilterUtils.or(filters));
+    }
+    
+    /**
+     * Méthode initialisant les différents filtres à appliquer aux fichiers et dossiers (depuis l'IHM)
+     * @param filters Filtres à appliquer
+     */
+    public void setFilters(IOFileFilter[] filters) {
+        
+        this.filters = filters;
     }
 }
 

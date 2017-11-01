@@ -8,14 +8,13 @@ import java.awt.event.ActionListener;
 /**
  * Import gestion de fichiers
  */
-import java.io.File;
+import org.apache.commons.io.filefilter.*;
+import org.apache.commons.io.IOCase;
 /**
  * Imports graphiques + création de l'arborescence
  */
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-
 /**
  *
  * @author Cédric GARCIA
@@ -25,11 +24,10 @@ public class Main extends JFrame implements Runnable {
     /**
      * Variables membres
      */
-    private DefaultMutableTreeNode root;
     private DefaultTreeModel treeModel;
-    private File rootPath;
     private JTree tree;
     private Thread explorer;
+    private Node node;
 
     /**
      * Constructeur par défaut
@@ -46,22 +44,24 @@ public class Main extends JFrame implements Runnable {
     @Override
     public void run() {
         
-        setRootPath("D:\\Users\\Cédric\\Downloads");
-        root = new DefaultMutableTreeNode(rootPath);
-        treeModel = new DefaultTreeModel(root);
-
+        node = new Node();
+        node.setFilePath("D:\\BTS SN\\DUGAST");
+        node.setRoot();
+        node.setFilters(new IOFileFilter[] {FileFilterUtils.suffixFileFilter("", IOCase.INSENSITIVE), FileFilterUtils.directoryFileFilter()});
+        
+        treeModel = node.treeModel();
         tree = new JTree(treeModel);
         tree.setShowsRootHandles(true);
         JScrollPane scrollPane = new JScrollPane(tree);
-        
-        String fileExt = "";
         
         JButton btnSearch = new JButton("Search");
         btnSearch.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                explorer = new Thread(new Node(root, rootPath, fileExt));
+                
+                //tree.removeAll();
+                explorer = new Thread(node);
                 explorer.start();
             }
         });
@@ -94,10 +94,6 @@ public class Main extends JFrame implements Runnable {
         
         pack();
         this.setVisible(true);
-        
-        /*while(this.explorer.isAlive()) {
-            tree.setEnabled(false);
-        }*/
     }
     
     /**
@@ -105,15 +101,7 @@ public class Main extends JFrame implements Runnable {
      * @param args 
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Main());
-    }
-
-    /**
-     * Initialisation du répertoire source
-     * @param path Chelin d'accès
-     */
-    public void setRootPath(String path) {
         
-        this.rootPath = new File(path);
+        SwingUtilities.invokeLater(new Main());
     }
 }
