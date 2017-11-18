@@ -32,6 +32,7 @@ public class Node implements INode, Runnable {
     private HashMap<String, ArrayList<File>> md5Table;
     private IOFileFilter[] filters;
     private CacheFile cacheFile;
+    private boolean searchDoublons;
     
     /**
      * Constructeur par défaut
@@ -76,24 +77,25 @@ public class Node implements INode, Runnable {
         
         File[] files = fileRoot.listFiles();
         //File[] files = filter(fileRoot);
-        ArrayList<File> listFile = new ArrayList();
+        
         
         cacheFile = new CacheFile();
         cacheFile.formatCacheFileName(fileRoot.getAbsolutePath());
+        cacheFiles(files);
         
-        if (files == null) return;
+        if (files == null) {
+            return;
+        }
 
         for (File file : files)
         {
-            
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new FileNode(file));
             node.add(childNode);
             
             if (file.isDirectory()) {
                 createNode(childNode, file);
             }
-            else if (file.isFile()) {
-                
+            else if (file.isFile() && searchDoublons) {
                 /*if(!md5Table.containsKey(md5))
                 {
                     listFile = new ArrayList();
@@ -103,12 +105,24 @@ public class Node implements INode, Runnable {
                 else {
                     md5Table.get(md5).add(file);
                 }*/
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param files
+     * @throws IOException 
+     */
+    protected void cacheFiles(File[] files) throws IOException {
+        
+        for (File file : files) {
+            if (file.isFile()) {
                 cacheFile.cache(file);
             }
         }
-        //System.out.println(md5Table + "\n");
     }
-
+    
     /**
      * 
      * @return 
@@ -116,7 +130,18 @@ public class Node implements INode, Runnable {
     @Override
     public HashMap<String, ArrayList<File>> doublons() {
         
+        ArrayList<ArrayList<File>> listFile = new ArrayList();
+        
         return md5Table;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public ArrayList<ArrayList<File>> setDoublons() {
+        
+        return null;
     }
 
     /**
@@ -207,5 +232,14 @@ public class Node implements INode, Runnable {
     public void setFilters(IOFileFilter[] filters) {
         
         this.filters = filters;
+    }
+
+    /**
+     * 
+     * @param searchDoublons 
+     */
+    public void setSearchDoublons(boolean searchDoublons) {
+        
+        this.searchDoublons = searchDoublons;
     }
 }

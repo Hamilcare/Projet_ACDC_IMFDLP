@@ -47,6 +47,7 @@ public class Main extends JFrame implements Runnable {
         node = new Node();
         node.setFilePath("D:\\Utilisateurs\\Cédric\\Downloads");
         node.setRoot();
+        node.setSearchDoublons(false);
         
         treeModel = node.treeModel();
         tree = new JTree(treeModel);
