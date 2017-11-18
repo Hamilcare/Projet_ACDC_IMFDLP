@@ -4,13 +4,12 @@ package acdc_imfdlp;
  * Imports gestion de fichiers
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 /**
  * Import création de l'arborescence
  */
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 
 /**
  * Interface de l'API
@@ -20,11 +19,9 @@ public interface INode {
     
     public HashMap<String, ArrayList<File>> doublons();
     
-    public DefaultTreeModel treeModel();
+    public TreeModel treeModel();
 
     public String filename(File file);
-
-    public String hash(File file) throws IOException;
 
     public long weight(File file);
     

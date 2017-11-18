@@ -4,21 +4,19 @@ package acdc_imfdlp;
  * Imports gestion de fichiers, filtrage des fichiers
  */
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.io.filefilter.*;
 /**
  * Imports construction de l'arborescence
  */
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-/**
- * Import génération du hash
- */
-import org.apache.commons.codec.digest.DigestUtils;
+import javax.swing.tree.TreeModel;
 
 /**
  *
@@ -33,6 +31,7 @@ public class Node implements INode, Runnable {
     private File filePath;
     private HashMap<String, ArrayList<File>> md5Table;
     private IOFileFilter[] filters;
+    private CacheFile cacheFile;
     
     /**
      * Constructeur par défaut
@@ -60,7 +59,12 @@ public class Node implements INode, Runnable {
     @Override
     public void run() {
         
-        createNode(root, filePath);
+        try {
+            createNode(root, filePath);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -68,43 +72,41 @@ public class Node implements INode, Runnable {
      * @param node Modèle d'arbre utilisé pour la modélisation de l'arborescence
      * @param fileRoot Répertoire racine
      */
-    private void createNode(DefaultMutableTreeNode node, File fileRoot) {
+    private void createNode(DefaultMutableTreeNode node, File fileRoot) throws FileNotFoundException, IOException {
         
-        String md5;
-        File[] files = filter(fileRoot);
+        File[] files = fileRoot.listFiles();
+        //File[] files = filter(fileRoot);
         ArrayList<File> listFile = new ArrayList();
+        
+        cacheFile = new CacheFile();
+        cacheFile.formatCacheFileName(fileRoot.getAbsolutePath());
         
         if (files == null) return;
 
         for (File file : files)
         {
+            
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new FileNode(file));
             node.add(childNode);
-            if (file.isDirectory() && file.length() != 0) {
+            
+            if (file.isDirectory()) {
                 createNode(childNode, file);
             }
             else if (file.isFile()) {
                 
-                //long start = System.nanoTime();
-                try {
-                    md5 = hash(file);
-                    if(!md5Table.containsKey(md5))
-                    {
-                        listFile = new ArrayList();
-                        listFile.add(file);
-                        md5Table.put(md5, listFile);
-                    }
-                    else {
-                        md5Table.get(md5).add(file);
-                    }
-                } catch (IOException e) {
-                    
+                /*if(!md5Table.containsKey(md5))
+                {
+                    listFile = new ArrayList();
+                    listFile.add(file);
+                    md5Table.put(md5, listFile);
                 }
-                //long end = System.nanoTime();
-                //System.out.println((end - start));
+                else {
+                    md5Table.get(md5).add(file);
+                }*/
+                cacheFile.cache(file);
             }
         }
-        System.out.println(md5Table + "\n");
+        //System.out.println(md5Table + "\n");
     }
 
     /**
@@ -122,9 +124,9 @@ public class Node implements INode, Runnable {
      * @return Modèle d'arbre pour une utilisation avec JTree
      */
     @Override
-    public DefaultTreeModel treeModel() {
+    public TreeModel treeModel() {
         
-        return new DefaultTreeModel(this.root) {};
+        return new DefaultTreeModel(this.root);
     }
     
     /**
@@ -136,18 +138,6 @@ public class Node implements INode, Runnable {
     public String filename(File file) {
         
         return file.getName();
-    }
-
-    /**
-     * Retourne le hash md5 d'un fichier
-     * @param file Fichier
-     * @return Hash md5 du fichier
-     * @throws IOException Erreur si l'on a par ex. pas les droits sur le fichier
-     */
-    @Override
-    public String hash(File file) throws IOException {
-        
-        return DigestUtils.md5Hex(new FileInputStream(file));
     }
 
     /**
@@ -206,7 +196,8 @@ public class Node implements INode, Runnable {
     @Override
     public File[] filter(File fileRoot) {
         
-        return fileRoot.listFiles((FileFilter) FileFilterUtils.or(filters));
+        //return fileRoot.listFiles((FileFilter) FileFilterUtils.or(filters));
+        return fileRoot.listFiles();
     }
     
     /**

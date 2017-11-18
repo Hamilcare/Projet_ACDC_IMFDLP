@@ -14,7 +14,7 @@ public class FileNode {
     /**
      * Variable membre
      */
-    private File file;
+    private final File file;
 
     /**
      * Constructeur

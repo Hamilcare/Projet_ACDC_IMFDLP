@@ -14,7 +14,7 @@ import org.apache.commons.io.IOCase;
  * Imports graphiques + création de l'arborescence
  */
 import javax.swing.*;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 /**
  *
  * @author Cédric GARCIA
@@ -24,7 +24,7 @@ public class Main extends JFrame implements Runnable {
     /**
      * Variables membres
      */
-    private DefaultTreeModel treeModel;
+    private TreeModel treeModel;
     private JTree tree;
     private Thread explorer;
     private Node node;
@@ -45,7 +45,7 @@ public class Main extends JFrame implements Runnable {
     public void run() {
         
         node = new Node();
-        node.setFilePath("D:\\FIL\\A1");
+        node.setFilePath("D:\\Utilisateurs\\Cédric\\Downloads");
         node.setRoot();
         
         treeModel = node.treeModel();
