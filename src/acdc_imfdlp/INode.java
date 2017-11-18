@@ -5,6 +5,8 @@ package acdc_imfdlp;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * Import création de l'arborescence
  */
@@ -16,11 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public interface INode {
     
-    public INode tree(String path);
-    
-    public INode tree(String path, int profondeur);
-    
-    public File[] doublons();
+    public HashMap<String, ArrayList<File>> doublons();
     
     public DefaultTreeModel treeModel();
 
@@ -31,8 +29,6 @@ public interface INode {
     public long weight(File file);
     
     public String absolutePath(File file);
-    
-    public INode[] child();
     
     public File[] filter(File fileRoot);
 }

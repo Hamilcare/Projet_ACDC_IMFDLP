@@ -45,9 +45,8 @@ public class Main extends JFrame implements Runnable {
     public void run() {
         
         node = new Node();
-        node.setFilePath("D:\\BTS SN\\DUGAST");
+        node.setFilePath("D:\\FIL\\A1");
         node.setRoot();
-        node.setFilters(new IOFileFilter[] {FileFilterUtils.suffixFileFilter("", IOCase.INSENSITIVE), FileFilterUtils.directoryFileFilter()});
         
         treeModel = node.treeModel();
         tree = new JTree(treeModel);
@@ -60,7 +59,8 @@ public class Main extends JFrame implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                //tree.removeAll();
+                tree.removeAll();
+                node.setFilters(new IOFileFilter[] {FileFilterUtils.suffixFileFilter("", IOCase.INSENSITIVE), FileFilterUtils.directoryFileFilter()});
                 explorer = new Thread(node);
                 explorer.start();
             }

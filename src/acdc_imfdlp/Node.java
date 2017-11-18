@@ -1,7 +1,7 @@
 package acdc_imfdlp;
 
 /**
- * Imports gestion de fichiers
+ * Imports gestion de fichiers, filtrage des fichiers
  */
 import java.io.File;
 import java.io.FileFilter;
@@ -55,7 +55,7 @@ public class Node implements INode, Runnable {
     }
     
     /**
-     * Méthode appelée au démarrage du Thread
+     * Appel de la méthode de parcours de l'arborescence au démarrage du Thread
      */
     @Override
     public void run() {
@@ -64,9 +64,9 @@ public class Node implements INode, Runnable {
     }
     
     /**
-     * Créé les noeuds à partir de la liste des fihciers et dossiers du répertoire source
-     * @param node Modèle d'arbre
-     * @param fileRoot Répertoire source
+     * Création des noeuds à partir de la liste des fichiers et dossiers depuis le répertoire racine défini
+     * @param node Modèle d'arbre utilisé pour la modélisation de l'arborescence
+     * @param fileRoot Répertoire racine
      */
     private void createNode(DefaultMutableTreeNode node, File fileRoot) {
         
@@ -104,30 +104,7 @@ public class Node implements INode, Runnable {
                 //System.out.println((end - start));
             }
         }
-        //System.out.println(md5Table + "\n");
-    }
-
-    /**
-     * 
-     * @param path
-     * @return 
-     */
-    @Override
-    public INode tree(String path) {
-        
-        return null;
-    }
-
-    /**
-     * 
-     * @param path
-     * @param profondeur
-     * @return 
-     */
-    @Override
-    public INode tree(String path, int profondeur) {
-        
-        return null;
+        System.out.println(md5Table + "\n");
     }
 
     /**
@@ -135,19 +112,19 @@ public class Node implements INode, Runnable {
      * @return 
      */
     @Override
-    public File[] doublons() {
+    public HashMap<String, ArrayList<File>> doublons() {
         
-        return null;
+        return md5Table;
     }
 
     /**
-     * 
-     * @return 
+     * Retourne le TreeModel à partir duquel sera créé l'arborescence dans l'IHM
+     * @return Modèle d'arbre pour une utilisation avec JTree
      */
     @Override
     public DefaultTreeModel treeModel() {
         
-        return new DefaultTreeModel(this.root);
+        return new DefaultTreeModel(this.root) {};
     }
     
     /**
@@ -174,7 +151,7 @@ public class Node implements INode, Runnable {
     }
 
     /**
-     * Retourne le taille d'un fichier ou d'un dossier
+     * Retourne la taille d'un fichier ou d'un dossier
      * @param file Fichier ou dossier
      * @return Taille
      */
@@ -194,19 +171,9 @@ public class Node implements INode, Runnable {
         
         return file.getAbsolutePath();
     }
-
-    /**
-     * 
-     * @return 
-     */
-    @Override
-    public INode[] child() {
-        
-        return null;
-    }
     
     /**
-     * Initialisation du répertoire source
+     * Initialisation du répertoire racine
      * @param path Chemin d'accès
      */
     public void setFilePath(String path) {
@@ -215,7 +182,7 @@ public class Node implements INode, Runnable {
     }
     
     /**
-     * Initialisation du DefaultMutableTreeNode
+     * Initialisation du modèle d'arbre de l'arborescence (DefaultMutableTreeNode)
      */
     public void setRoot() {
         
@@ -223,8 +190,8 @@ public class Node implements INode, Runnable {
     }
     
     /**
-     * 
-     * @return 
+     * Retourne le modèle d'arbre de l'arborescence
+     * @return Modèle d'arbre par défaut
      */
     public DefaultMutableTreeNode getRoot() {
         
@@ -232,7 +199,7 @@ public class Node implements INode, Runnable {
     }
 
     /**
-     * Méthode filtrant les fichiers par type
+     * Méthode de filtrage des fichiers des l'arborescence
      * @param fileRoot Répertoire racine à partir duquel lister les fichiers
      * @return 
      */
@@ -244,11 +211,10 @@ public class Node implements INode, Runnable {
     
     /**
      * Méthode initialisant les différents filtres à appliquer aux fichiers et dossiers (depuis l'IHM)
-     * @param filters Filtres à appliquer
+     * @param filters Tableau du/des filtre(s) à appliquer
      */
     public void setFilters(IOFileFilter[] filters) {
         
         this.filters = filters;
     }
 }
-
