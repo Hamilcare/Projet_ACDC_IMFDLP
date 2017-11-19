@@ -116,9 +116,15 @@ public class Node implements INode, Runnable {
      */
     protected void cacheFiles(File[] files) throws IOException {
         
+        File cache = new File(cacheFile.getCacheFileName());
+        
         for (File file : files) {
             if (file.isFile()) {
-                cacheFile.cache(file);
+                if (!cache.exists()) {
+                    cacheFile.writeCacheFile(file);
+                } else {
+                    cacheFile.readCacheFile(file);
+                }
             }
         }
     }
@@ -130,18 +136,7 @@ public class Node implements INode, Runnable {
     @Override
     public HashMap<String, ArrayList<File>> doublons() {
         
-        ArrayList<ArrayList<File>> listFile = new ArrayList();
-        
         return md5Table;
-    }
-    
-    /**
-     * 
-     * @return 
-     */
-    public ArrayList<ArrayList<File>> setDoublons() {
-        
-        return null;
     }
 
     /**

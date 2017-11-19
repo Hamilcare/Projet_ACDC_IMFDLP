@@ -5,13 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Stream;
+import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -32,16 +28,6 @@ public class CacheFile {
 
     }
     
-    protected void cache(File file) throws IOException {
-        
-        currentFile = file;
-        //if (!cacheFile.exists()) {
-            writeCacheFile();
-        /*} else {
-            readCacheFile();
-        }*/
-    }
-    
     /**
      * 
      * @param absolutePath 
@@ -52,8 +38,6 @@ public class CacheFile {
         cacheFileName = cacheFileName.replaceAll("\\\\", "_");
         cacheFileName = cacheFileName.replaceAll(":", "");
         cacheFileName = "D:\\Cache_ACDC\\" + cacheFileName + ".cache";
-        
-        cacheFile = new File(getCacheFileName());
     }
     
     /**
@@ -63,20 +47,20 @@ public class CacheFile {
      */
     protected String formatCacheLine(String hash) {
         
-        return "file=[" + currentFile.getAbsolutePath() + "];hash=[" + hash + "];timestamp=[" + currentFile.lastModified() + "];*";
+        return "file=[" + currentFile.getAbsolutePath() + "];hash=[" + hash + "];timestamp=[" + currentFile.lastModified() + "];*"
+                + System.getProperty("line.separator");
     }
 
     /**
      * 
      * @throws IOException 
      */
-    protected void writeCacheFile() throws IOException {
+    protected void writeCacheFile(File file) throws IOException {
 
-        
+        currentFile = file;
         cacheWriter = new FileWriter(cacheFileName, true);
         bufferedWriter = new BufferedWriter(cacheWriter);
         bufferedWriter.write(formatCacheLine(hash()));
-        bufferedWriter.newLine();
         bufferedWriter.close();
         cacheWriter.close();
     }
@@ -85,44 +69,35 @@ public class CacheFile {
      * 
      * @throws IOException 
      */
-    protected void readCacheFile() throws IOException {
+    protected void readCacheFile(File file) throws IOException {
 
-        /*try (Scanner scanner = new Scanner(new File(getCacheFileName()))) {
-            while (scanner.hasNextLine()) {
-                
-                String line = scanner.nextLine();
-                System.out.println(line);
-                processLine(line);
+        currentFile = file;
+        boolean isCached = true;
+        
+        File cache = new File(getCacheFileName());
+        List<String> lines = FileUtils.readLines(cache);
+        for (String line : lines) {
+            if (extractNameFromCache(line).equals(currentFile.getAbsolutePath())
+                    && (extractLastModifiedFromCache(line) == currentFile.lastModified())) {
+                isCached = true;
                 break;
             }
-        }*/
-        
-        try (Stream<String> stream = Files.lines(Paths.get(getCacheFileName()))) {
-            stream.forEach(currentLine -> {
-                try {
-                    processLine(currentLine);
-                } catch (IOException e) {
-                    
-                }
-            });
+            if (!extractNameFromCache(line).equals(currentFile.getAbsolutePath())) {
+                isCached = false;
+            }
+            if (extractNameFromCache(line).equals(currentFile.getAbsolutePath())
+                    && (extractLastModifiedFromCache(line) != currentFile.lastModified())) {
+                FileUtils.write(cache, formatCacheLine(hash()));
+                isCached = true;
+                break;
+            }
+            if (!(new File(extractNameFromCache(line)).exists())) {
+                FileUtils.write(cache, "");
+                break;
+            }
         }
-    }
-    
-    /**
-     * 
-     * @param currentLine
-     * @throws IOException 
-     */
-    protected void processLine(String currentLine) throws IOException {
-        
-        String fileNameFromCache = extractNameFromCache(currentLine);
-        long lastModifiedFromCache = extractLastModifiedFromCache(currentLine);
-        
-        System.out.println(fileNameFromCache + lastModifiedFromCache);
-        
-        if((currentFile.getAbsolutePath().equals(fileNameFromCache)) &&
-                !(currentFile.lastModified() == lastModifiedFromCache)) {
-            replaceValueFromCache(currentLine, lastModifiedFromCache);
+        if (!isCached) {
+            writeCacheFile(currentFile);
         }
     }
     
@@ -144,35 +119,6 @@ public class CacheFile {
     private String extractNameFromCache(String currentLine) {
         
         return currentLine.substring(currentLine.indexOf("file=[") + 6, currentLine.indexOf("];hash"));
-    }
-    
-    /**
-     * 
-     * @param currentLine
-     * @throws IOException 
-     */
-    private void deleteValueFromCache(String currentLine) throws IOException {
-        
-        cacheWriter = new FileWriter(cacheFileName, true);
-        bufferedWriter = new BufferedWriter(cacheWriter);
-        bufferedWriter.write(currentLine + System.getProperty("line.separator"));
-        bufferedWriter.close();
-        cacheWriter.close();
-    }
-    
-    /**
-     * 
-     * @param currentLine
-     * @param lastModifiedFromCache
-     * @throws IOException 
-     */
-    private void replaceValueFromCache(String currentLine, long lastModifiedFromCache) throws IOException {
-        
-        cacheWriter = new FileWriter(cacheFileName, true);
-        bufferedWriter = new BufferedWriter(cacheWriter);
-        bufferedWriter.write(currentLine.replaceAll(String.valueOf(lastModifiedFromCache), String.valueOf(currentFile.lastModified())));
-        bufferedWriter.close();
-        cacheWriter.close();
     }
     
     /**
