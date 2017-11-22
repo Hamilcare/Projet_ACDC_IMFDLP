@@ -1,18 +1,9 @@
 package acdc_imfdlp;
 
-/**
- * Imports ActionListener
- */
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-/**
- * Import gestion de fichiers
- */
+import java.io.File;
 import org.apache.commons.io.filefilter.*;
-import org.apache.commons.io.IOCase;
-/**
- * Imports graphiques + création de l'arborescence
- */
 import javax.swing.*;
 import javax.swing.tree.TreeModel;
 /**
@@ -45,9 +36,8 @@ public class Main extends JFrame implements Runnable {
     public void run() {
         
         node = new Node();
-        node.setFilePath("D:\\Utilisateurs\\Cédric\\Downloads");
+        node.setFilePath("D:\\FIL\\A1");
         node.setRoot();
-        node.setSearchDoublons(false);
         
         treeModel = node.treeModel();
         tree = new JTree(treeModel);
@@ -61,7 +51,8 @@ public class Main extends JFrame implements Runnable {
             public void actionPerformed(ActionEvent e) {
                 
                 tree.removeAll();
-                node.setFilters(new IOFileFilter[] {FileFilterUtils.suffixFileFilter("", IOCase.INSENSITIVE), FileFilterUtils.directoryFileFilter()});
+                CacheFilter cacheFilter = new CacheFilter();
+                node.setFilters(new IOFileFilter[] {cacheFilter, FileFilterUtils.directoryFileFilter() });
                 explorer = new Thread(node);
                 explorer.start();
             }
@@ -99,10 +90,31 @@ public class Main extends JFrame implements Runnable {
     
     /**
      * Main
+     * 
      * @param args 
      */
     public static void main(String[] args) {
         
         SwingUtilities.invokeLater(new Main());
     }
+    
+    /**
+     * Classe filtre d'exclusion des fichiers de cache
+     */
+    public class CacheFilter implements IOFileFilter {
+
+        String cache = ".cache";
+        @Override
+        public boolean accept(File file) {
+            
+            return !file.getName().contains(cache);
+        }
+
+        @Override
+        public boolean accept(File dir, String name) {
+            throw new UnsupportedOperationException();
+        }
+    }
 }
+
+

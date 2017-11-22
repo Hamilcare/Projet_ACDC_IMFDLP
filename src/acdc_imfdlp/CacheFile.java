@@ -3,47 +3,52 @@ package acdc_imfdlp;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
+ * Classe de cache des fichiers
+ * 
  * @author Cédric GARCIA
  */
 public class CacheFile {
 
+    /**
+     * Attributs
+     */
+    private Node node;
     private String cacheFileName;
-    protected File cacheFile;
     private File currentFile;
     private FileWriter cacheWriter;
     private BufferedWriter bufferedWriter;
 
     /**
-     * 
+     * Constructeur par défaut
      */
     public CacheFile() {
 
+        this.node = new Node();
     }
     
     /**
+     * Formatage du nom du fichier de cache à partir du nom du dossier courant
      * 
-     * @param absolutePath 
+     * @param absolutePath Chemin absolu du dossier courant
      */
     protected void formatCacheFileName(String absolutePath) {
         
         cacheFileName = absolutePath;
         cacheFileName = cacheFileName.replaceAll("\\\\", "_");
         cacheFileName = cacheFileName.replaceAll(":", "");
-        cacheFileName = "D:\\Cache_ACDC\\" + cacheFileName + ".cache";
+        cacheFileName = "cache\\" + cacheFileName + ".cache";
     }
     
     /**
+     * Formatage par défaut des lignes à inscrire dans les fichiers de cache
      * 
-     * @param hash
-     * @return 
+     * @param hash Hash du fichier courant
+     * @return Ligne formatée
      */
     protected String formatCacheLine(String hash) {
         
@@ -52,21 +57,27 @@ public class CacheFile {
     }
 
     /**
+     * Première écriture du fichier de cache pour le dossier courant s'il n'existe pas
      * 
-     * @throws IOException 
+     * @param file Fichier courant à inscrire dans le cache
+     * @param md5 Hash du fichier courant
+     * @throws IOException
      */
-    protected void writeCacheFile(File file) throws IOException {
+    protected void writeCacheFile(File file, String md5) throws IOException {
 
         currentFile = file;
         cacheWriter = new FileWriter(cacheFileName, true);
         bufferedWriter = new BufferedWriter(cacheWriter);
-        bufferedWriter.write(formatCacheLine(hash()));
+        bufferedWriter.write(formatCacheLine(md5));
         bufferedWriter.close();
         cacheWriter.close();
     }
 
     /**
+     * Lecture et écriture dans le fichier de cache s'il existe déjà. Gère les cas où
+     * le fichier a été modifié, supprimé, ou nouvellement ajouté au dossier courant
      * 
+     * @param file Fichir courant
      * @throws IOException 
      */
     protected void readCacheFile(File file) throws IOException {
@@ -87,7 +98,7 @@ public class CacheFile {
             }
             if (extractNameFromCache(line).equals(currentFile.getAbsolutePath())
                     && (extractLastModifiedFromCache(line) != currentFile.lastModified())) {
-                FileUtils.write(cache, formatCacheLine(hash()));
+                FileUtils.write(cache, formatCacheLine(node.hash(currentFile)));
                 isCached = true;
                 break;
             }
@@ -97,24 +108,15 @@ public class CacheFile {
             }
         }
         if (!isCached) {
-            writeCacheFile(currentFile);
+            writeCacheFile(currentFile, node.hash(currentFile));
         }
     }
     
     /**
+     * Extraction du Nom du fichier depuis le cache (s'il est caché)
      * 
-     * @param currentLine
-     * @return 
-     */
-    private long extractLastModifiedFromCache(String currentLine) {
-        
-        return Long.parseLong(currentLine.substring(currentLine.indexOf(";timestamp=[") + 12, currentLine.indexOf("];*")));
-    }
-    
-    /**
-     * 
-     * @param currentLine
-     * @return 
+     * @param currentLine Ligne courante du fichier de cache
+     * @return Nom du fichier
      */
     private String extractNameFromCache(String currentLine) {
         
@@ -122,20 +124,31 @@ public class CacheFile {
     }
     
     /**
-     * Retourne le hash md5 d'un fichier
-     * @return Hash md5 du fichier
-     * @throws IOException Erreur si l'on a par ex. pas les droits sur le fichier
+     * Extraction du Hash du fichier depuis le cache (s'il est caché)
+     * 
+     * @param currentLine Ligne courante du fichier de cache
+     * @return Valeur du Hash
      */
-    public String hash() throws IOException {
+    private String extractHashFromCache(String currentLine) {
         
-        try (FileInputStream fStream = new FileInputStream(currentFile)) {
-            return DigestUtils.md5Hex(fStream);
-        }
+        return currentLine.substring(currentLine.indexOf("hash=[") + 6, currentLine.indexOf("];timestamp"));
+    }
+    
+    /**
+     * Extraction du TimeStamp du fichier courant depuis le cache (s'il est caché)
+     * 
+     * @param currentLine Ligne courante du fichier de cache
+     * @return Valeur du TimeStamp
+     */
+    private long extractLastModifiedFromCache(String currentLine) {
+        
+        return Long.parseLong(currentLine.substring(currentLine.indexOf(";timestamp=[") + 12, currentLine.indexOf("];*")));
     }
 
     /**
+     * Nom du fichier de cache pour le dossier courant
      * 
-     * @return 
+     * @return Fichier de cache dans lequel écrire
      */
     public String getCacheFileName() {
         
