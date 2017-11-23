@@ -3,6 +3,7 @@ package acdc_imfdlp;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
@@ -17,7 +18,7 @@ public class CacheFile {
     /**
      * Attributs
      */
-    private Node node;
+    private final Node node;
     private String cacheFileName;
     private File currentFile;
     private FileWriter cacheWriter;
@@ -52,7 +53,7 @@ public class CacheFile {
      */
     protected String formatCacheLine(String hash) {
         
-        return "file=[" + currentFile.getAbsolutePath() + "];hash=[" + hash + "];timestamp=[" + currentFile.lastModified() + "];*"
+        return "file=[" + currentFile.getName() + "];hash=[" + hash + "];timestamp=[" + currentFile.lastModified() + "];*"
                 + System.getProperty("line.separator");
     }
 
@@ -84,26 +85,31 @@ public class CacheFile {
 
         currentFile = file;
         boolean isCached = true;
+        StringBuilder inputBuffer = new StringBuilder();
         
         File cache = new File(getCacheFileName());
         List<String> lines = FileUtils.readLines(cache);
         for (String line : lines) {
-            if (extractNameFromCache(line).equals(currentFile.getAbsolutePath())
+            
+            inputBuffer.append(line);
+            inputBuffer.append('\n');
+            String inputStr = inputBuffer.toString();
+            
+            if (extractNameFromCache(line).equals(currentFile.getName())
                     && (extractLastModifiedFromCache(line) == currentFile.lastModified())) {
                 isCached = true;
                 break;
             }
-            if (!extractNameFromCache(line).equals(currentFile.getAbsolutePath())) {
+            if (!extractNameFromCache(line).equals(currentFile.getName())) {
                 isCached = false;
             }
-            if (extractNameFromCache(line).equals(currentFile.getAbsolutePath())
+            if (extractNameFromCache(line).equals(currentFile.getName())
                     && (extractLastModifiedFromCache(line) != currentFile.lastModified())) {
-                FileUtils.write(cache, formatCacheLine(node.hash(currentFile)));
-                isCached = true;
-                break;
-            }
-            if (!(new File(extractNameFromCache(line)).exists())) {
-                FileUtils.write(cache, "");
+                //FileUtils.write(cache, formatCacheLine(node.hash(currentFile)));
+                inputStr = inputStr.replaceAll(line, formatCacheLine(node.hash(currentFile)));
+                try (FileOutputStream out = new FileOutputStream(cache)) {
+                    out.write(inputStr.getBytes());
+                }
                 break;
             }
         }
@@ -150,7 +156,7 @@ public class CacheFile {
      * 
      * @return Fichier de cache dans lequel écrire
      */
-    public String getCacheFileName() {
+    protected String getCacheFileName() {
         
         return cacheFileName;
     }

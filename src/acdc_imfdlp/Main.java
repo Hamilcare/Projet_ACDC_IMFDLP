@@ -36,7 +36,7 @@ public class Main extends JFrame implements Runnable {
     public void run() {
         
         node = new Node();
-        node.setFilePath("D:\\FIL\\A1");
+        node.setFilePath("D:\\Users\\Cédric\\Downloads");
         node.setRoot();
         
         treeModel = node.treeModel();
@@ -116,5 +116,3 @@ public class Main extends JFrame implements Runnable {
         }
     }
 }
-
-

@@ -183,7 +183,7 @@ public class Node implements INode, Runnable {
      * 
      * @param path Chemin d'accès
      */
-    public void setFilePath(String path) {
+    protected void setFilePath(String path) {
         
         this.filePath = new File(path);
     }
@@ -191,7 +191,7 @@ public class Node implements INode, Runnable {
     /**
      * Initialisation du modèle d'arbre de l'arborescence (DefaultMutableTreeNode)
      */
-    public void setRoot() {
+    protected void setRoot() {
         
         root = new DefaultMutableTreeNode(filePath);
     }
@@ -201,7 +201,7 @@ public class Node implements INode, Runnable {
      * 
      * @return Modèle d'arbre de l'arborescence
      */
-    public DefaultMutableTreeNode getRoot() {
+    protected DefaultMutableTreeNode getRoot() {
         
         return this.root;
     }
@@ -223,7 +223,7 @@ public class Node implements INode, Runnable {
      * 
      * @param filters Tableau du/des filtre(s) à appliquer
      */
-    public void setFilters(IOFileFilter[] filters) {
+    protected void setFilters(IOFileFilter[] filters) {
         
         this.filters = filters;
     }
