@@ -5,11 +5,12 @@
 
 ### 1.1 - Execution du .jar
 
-- Se placer dans le répertoire contenant le fichier ACDC_IMFDLP.jar. Vérifier la présence du dossier "cache"; il doit être vide.
+- Extraire le contenu de l'archive ACDC_IMFDLP.zip
+- Se placer dans le répertoire ACDC_IMFDLP. Vérifier la présence du dossier "cache"; il doit être vide.
 - Ouvrir une console.
 - Executer le .jar en utilisant la commande "java -jar ACDC_IMFDLP.jar".
 
-Cependant, le .jar ne produira aucune action si l'on ne spécifie aucun paramètre derrière le commande d'éxécution. En mode console, seule deux options sont disponibles. Elles sont détaillées dans le point 1.2.
+Cependant, le .jar ne produira aucune action si l'on ne spécifie aucun paramètre derrière la commande d'éxécution. En mode console, seules deux options sont disponibles. Elles sont détaillées dans le point 1.2.
 
 ### 1.2 - Options disponibles
 
@@ -32,7 +33,7 @@ Le logiciel repose sur une architecture parcourant récursivement les répertoir
 
 ### 2.1 - La classe Node
 
-Cette classe implémente les les fonctionnalités de l'API que nosu avions déterminées. Egalement, elle implémente "Runnable" de Java afin de pouvoir fonctionner dans un Thread.
+Cette classe implémente les les fonctionnalités de l'API que nous avions déterminées. Egalement, elle implémente "Runnable" de Java afin de pouvoir fonctionner dans un Thread.
 
 Elle est caractérisée par trois méthodes principales :
 
@@ -50,7 +51,7 @@ Cette classe porte un attribut de type File, une méthode permettant de le retou
 
 ### 2.3 - La classe CacheFile
 
-Cette classe utilisée par la méthode doublons génère des fichiers de cache de l'arborescence. pour chaque dossier, un fichier de cache est généré. Il comporte pour tous les fichiers qu'il contient le nom du fichier, son hash md5 ainsi que la dernière date de modification. La première génération du cache rpend du temps. Cependant, il sera ensuite utilisé comme élément de comparaion et permettra de gagner du temps afin d'éviter de hasher à nouveau des fichiers qui n'ont pas été modifiés.
+Cette classe utilisée par la méthode doublons génère des fichiers de cache de l'arborescence. pour chaque dossier, un fichier de cache est généré. Il comporte pour tous les fichiers qu'il contient le nom du fichier, son hash md5 ainsi que la dernière date de modification. La première génération du cache prend du temps. Cependant, il sera ensuite utilisé comme élément de comparaion et permettra de gagner du temps afin d'éviter de hasher à nouveau des fichiers qui n'ont pas été modifiés.
 
 
 ## 3 - Diagramme de classes
@@ -65,4 +66,4 @@ Lien vers la Javadoc :
 
 ### 4.1 - Difficultées rencontrées
 
-La plus grande difficulté du projet était de trouver une manière de parcourir l'arborescence en un temps optimal. J'ai trouvé qu'utiliser la méthode listFiles de manière récursive était un bon compromis en terme de performances. l'avantage est qu'en remplissant récursivement un objet de type "DefaultMutableTreeNode" permet de le réutiliser ensuite pour générer un Jtree en Swing, un aspect important pour la seconde partie du projet. Pour des raisons d'éfficacité, j'ai décidé d'utiliser des librairies externes pour la génération du hash md5 et les possibilités combinatoires de filtrage.
+La plus grande difficulté du projet était de trouver une manière de parcourir l'arborescence en un temps optimal. J'ai trouvé qu'utiliser la méthode listFiles de manière récursive était un bon compromis en terme de performances. L'avantage est que de remplir récursivement un objet de type "DefaultMutableTreeNode" permet de le réutiliser ensuite pour générer un Jtree en Swing, un aspect important pour la seconde partie du projet. Pour des raisons d'éfficacité, j'ai décidé d'utiliser des librairies externes pour la génération du hash md5 et les possibilités combinatoires de filtrage.
