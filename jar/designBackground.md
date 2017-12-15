@@ -56,7 +56,7 @@ Cette classe utilisée par la méthode doublons génère des fichiers de cache d
 
 ## 3 - Diagramme de classes
 
-Lien vers le diagramme :
+Lien vers le diagramme : [Diagramme de classes](diagramme.png).
 
 
 ## 4 - Javadoc
