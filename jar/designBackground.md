@@ -61,7 +61,7 @@ Lien vers le diagramme : [Diagramme de classes](diagramme.png).
 
 ## 4 - Javadoc
 
-Lien vers la Javadoc :
+Lien vers la Javadoc : [Javadoc](./javadoc/index.html)
 
 
 ### 4.1 - Difficultées rencontrées
