@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import org.apache.commons.io.filefilter.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -28,7 +29,6 @@ public class Node implements INode, Runnable {
     private HashMap<String, ArrayList<File>> md5Table = new HashMap<>();;
     private IOFileFilter[] filters;
     private CacheFile cacheFile;
-    private String md5;
     
     /**
      * Constructeur par défaut
@@ -87,28 +87,6 @@ public class Node implements INode, Runnable {
             }
         }
     }
-
-    /**
-     * Appel de la méthode d'écriture en cache
-     * 
-     * @param files Ficiers du répertoire à cacher
-     * @throws IOException
-     */
-    protected void cacheFiles(File[] files) throws IOException {
-        
-        File cache = new File(cacheFile.getCacheFileName());
-        
-        for (File file : files) {
-            if (file.isFile()) {
-                if (!cache.exists()) {
-                    md5 = hash(file);
-                    cacheFile.writeCacheFile(file, md5);
-                } else {
-                    cacheFile.readCacheFile(file);
-                }
-            }
-        }
-    }
     
     /**
      * Retourne le Hash md5 d'un fichier
@@ -139,20 +117,25 @@ public class Node implements INode, Runnable {
         
         cacheFile = new CacheFile();
         cacheFile.formatCacheFileName(fileRoot.getAbsolutePath());
-        cacheFiles(files);
-        
+        File cache = new File(cacheFile.getCacheFileName());
+        String md5 = "";
         ArrayList listFile;
         
-        if (files == null) {
-            
-        }
+        if (files == null) {}
 
         for (File file : files)
         {
-            if (file.isDirectory()) {
+            if (file.isDirectory() && file.list().length > 0) {
                 doublons(file);
             }
             else if (file.isFile()) {
+                md5 = hash(file);
+                if (!cache.exists()) {
+                    cacheFile.writeCacheFile(file, md5);
+                } else {
+                    cacheFile.readCacheFile(file);
+                }
+                
                 if(!md5Table.containsKey(md5))
                 {
                     listFile = new ArrayList();
@@ -226,5 +209,28 @@ public class Node implements INode, Runnable {
     protected void setFilters(IOFileFilter[] filters) {
         
         this.filters = filters;
+    }
+    
+    @Override
+    public String toString() {
+        
+        String tree = "";
+        File file = new File("");
+        Enumeration en = root.depthFirstEnumeration();
+
+        while(en.hasMoreElements()) {
+            DefaultMutableTreeNode n = (DefaultMutableTreeNode) en.nextElement();
+            
+            try {
+                file = ((FileNode) n.getUserObject()).getFile();
+            } catch (Exception e) {
+                
+            }
+            
+            if(n != null) {
+                tree += file.getAbsolutePath() + "\n";
+            }   
+        }
+        return tree;
     }
 }
