@@ -235,6 +235,9 @@ public class MainFrame extends JFrame {
         this.node = node;
     }
 
+    /**
+     * Passe la vue active sur les filtres
+     */
     public void enableFiltreView() {
 
         filtreView.loadFiltreView(false);
@@ -271,18 +274,34 @@ public class MainFrame extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    public void refreshData() {
+    /**
+     * Refresh les data après une suppression
+     * 
+     * @param code
+     *            code 0 : treeView 1 : DoublonsView 2:FiltreView
+     */
+    public void refreshData(int code) {
 
         //Sans ça les fils de l aracine ne sont pas refresh
+        IOFileFilter[] tmpFilter = getNode().getFilters();
         node.setFilePath(node.getFilePath().getAbsolutePath());
         node.setRoot();
         this.buildTree();
         treeView = new ContainerTreeView(this);
         doublonsView = new ContainerDoublonsView(this);
-        doublonsView.loadDoublonsView(true);
-        filtreView = new ContainerFiltreView(this);
 
-        this.enableDoublonsView();
+        if (code == 1) {
+            filtreView = new ContainerFiltreView(this);
+            doublonsView.loadDoublonsView(true);
+            this.enableDoublonsView();
+        }
+
+        if (code == 2) {
+            filtreView.loadFiltreView(true);
+            filtreView.lancerRecherche(tmpFilter);
+            this.enableFiltreView();
+        }
+
     }
 
 }

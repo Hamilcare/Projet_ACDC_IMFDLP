@@ -6,14 +6,13 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import acdc_imfdlp.ContainerDoublonsView;
 import acdc_imfdlp.ContainerSupressionPossible;
 
 public class TableSelectionListener implements ListSelectionListener {
 
     ContainerSupressionPossible vueDoublons;
 
-    public TableSelectionListener(ContainerDoublonsView cdv) {
+    public TableSelectionListener(ContainerSupressionPossible cdv) {
         vueDoublons = cdv;
     }
 

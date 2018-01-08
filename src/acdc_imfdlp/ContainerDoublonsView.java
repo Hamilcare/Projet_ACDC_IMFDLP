@@ -175,7 +175,7 @@ public class ContainerDoublonsView extends Container implements ContainerSupress
 
     public void restartVueDoublons() {
 
-        mainFrame.refreshData();
+        mainFrame.refreshData(1);
 
     }
 

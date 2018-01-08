@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -11,22 +12,30 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 import org.apache.commons.io.filefilter.IOFileFilter;
 
 import controller.ButtonLancerRechercheListener;
+import controller.SupprListener;
+import controller.TableSelectionListener;
 import utils.TextPrompt;
 
-public class ContainerFiltreView extends Container {
+public class ContainerFiltreView extends Container implements ContainerSupressionPossible {
 
-    MainFrame      mainFrame;
-    Container      bandeauFiltre;
-    JTextField     inputFilter;
-    File[]         fichiersFiltres;
-    JTable         table;
-    JScrollPane    containerTable;
-    final String[] headers = { "FilenName", "AbsolutePath", "Weight", "Derniere Modif" };
-    Object[][]     data;
+    MainFrame          mainFrame;
+    Container          bandeauFiltre;
+    JTextField         inputFilter;
+    File[]             fichiersFiltres;
+    JTable             table;
+    JScrollPane        containerTable;
+    final String[]     headers = { "FilenName", "AbsolutePath", "Weight", "Derniere Modif" };
+    Object[][]         data;
+
+    ListSelectionModel cellSelectionModel;
+
+    ArrayList<String>  selectedFile;
 
     public ContainerFiltreView(MainFrame mf) {
         mainFrame = mf;
@@ -87,11 +96,13 @@ public class ContainerFiltreView extends Container {
      * Se charge de remplir la JTable ain de présenter les résultats de la
      * recherche
      */
-    private void printFilterResult() {
+    public void printFilterResult() {
 
+        mainFrame.getNode().setResultFilter(new ArrayList<File>());
         if (containerTable != null)
             this.remove(containerTable);
         this.computeData();
+        DefaultTableModel model = new DefaultTableModel(data, headers);
         table = new JTable(data, headers) {
 
             private static final long serialVersionUID = 1L;
@@ -104,6 +115,11 @@ public class ContainerFiltreView extends Container {
 
         //Toute la ligne est selectionnée
         table.setRowSelectionAllowed(true);
+
+        table.addKeyListener(new SupprListener(this));
+
+        cellSelectionModel = table.getSelectionModel();
+        cellSelectionModel.addListSelectionListener(new TableSelectionListener(this));
         containerTable = new JScrollPane(table);
         this.add(containerTable, BorderLayout.CENTER);
     }
@@ -145,6 +161,32 @@ public class ContainerFiltreView extends Container {
             this.removeJTable();
         }
 
+    }
+
+    @Override
+    public ArrayList<String> getFilePathToDelete() {
+
+        return selectedFile;
+    }
+
+    @Override
+    public void setFilePathToDelete(ArrayList<String> toDelete) {
+
+        selectedFile = toDelete;
+
+    }
+
+    @Override
+    public void restartVue() {
+
+        mainFrame.refreshData(2);
+
+    }
+
+    @Override
+    public JTable table() {
+
+        return table;
     }
 
 }
