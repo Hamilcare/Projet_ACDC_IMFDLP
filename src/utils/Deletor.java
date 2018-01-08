@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import acdc_imfdlp.ContainerDoublonsView;
+import acdc_imfdlp.ContainerSupressionPossible;
 
 /**
  * Se charge de la supression des fichiers désignés par l'utilisateur
@@ -18,9 +18,9 @@ import acdc_imfdlp.ContainerDoublonsView;
  */
 public class Deletor extends JFrame {
 
-    ContainerDoublonsView vueDoublons;
+    ContainerSupressionPossible vueDoublons;
 
-    public Deletor(ContainerDoublonsView cdb) {
+    public Deletor(ContainerSupressionPossible cdb) {
         vueDoublons = cdb;
         this.setTitle("Confirmez supression");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,9 +38,9 @@ public class Deletor extends JFrame {
 
     }
 
-    public String formatArray() {
+    private String formatArray() {
 
-        ArrayList<String> pathToDelete = vueDoublons.getSelectedFile();
+        ArrayList<String> pathToDelete = vueDoublons.getFilePathToDelete();
         StringBuilder sb = new StringBuilder();
         for (String s : pathToDelete) {
             sb.append(s).append("\n");
@@ -53,7 +53,7 @@ public class Deletor extends JFrame {
      */
     public void deleteFiles() {
 
-        ArrayList<String> pathToDelete = vueDoublons.getSelectedFile();
+        ArrayList<String> pathToDelete = vueDoublons.getFilePathToDelete();
         for (String s : pathToDelete) {
             try {
                 Files.deleteIfExists(Paths.get(s));
@@ -63,7 +63,7 @@ public class Deletor extends JFrame {
                 e.printStackTrace();
             }
         }
-        vueDoublons.restartVueDoublons();
+        vueDoublons.restartVue();
     }
 
 }

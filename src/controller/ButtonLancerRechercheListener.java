@@ -36,12 +36,12 @@ public class ButtonLancerRechercheListener implements ActionListener {
 
         //IOFileFilter[] resul = new IOFileFilter[tabStrFiltre.length + 2];
         //        IOFileFilter[] resul = new IOFileFilter[tabStrFiltre.length + 1];
-        IOFileFilter[] resul = new IOFileFilter[tabStrFiltre.length];
+        IOFileFilter[] resul = new IOFileFilter[tabStrFiltre.length + 1];
         //resul[0] = new CacheFilter();
         //resul[1] = FileFilterUtils.directoryFileFilter();
-        //resul[0] = FileFilterUtils.directoryFileFilter();
-        for (int i = 0; i < resul.length; i++) {
-            resul[i] = FileFilterUtils.suffixFileFilter(tabStrFiltre[i], IOCase.INSENSITIVE);
+        resul[0] = FileFilterUtils.directoryFileFilter();
+        for (int i = 1; i < resul.length; i++) {
+            resul[i] = FileFilterUtils.suffixFileFilter(tabStrFiltre[i - 1], IOCase.INSENSITIVE);
         }
 
         System.out.println("IOFILEFILTER : ");

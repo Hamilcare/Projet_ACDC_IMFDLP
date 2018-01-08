@@ -19,7 +19,7 @@ import controller.TableSelectionListener;
  * 
  * @author Valentin La vue permettant de consulter les doublons.
  */
-public class ContainerDoublonsView extends Container {
+public class ContainerDoublonsView extends Container implements ContainerSupressionPossible {
 
     private static final long        serialVersionUID = 7553782934445993773L;
 
@@ -176,6 +176,34 @@ public class ContainerDoublonsView extends Container {
     public void restartVueDoublons() {
 
         mainFrame.refreshData();
+
+    }
+
+    @Override
+    public ArrayList<String> getFilePathToDelete() {
+
+        // TODO Auto-generated method stub
+        return getSelectedFile();
+    }
+
+    @Override
+    public void restartVue() {
+
+        this.restartVueDoublons();
+
+    }
+
+    @Override
+    public void setFilePathToDelete(ArrayList<String> toDelete) {
+
+        this.setSelectedFile(toDelete);
+
+    }
+
+    @Override
+    public JTable table() {
+
+        return this.getTable();
 
     }
 

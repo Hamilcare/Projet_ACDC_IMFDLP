@@ -20,9 +20,11 @@ import utils.TextPrompt;
 public class ContainerFiltreView extends Container {
 
     MainFrame      mainFrame;
+    Container      bandeauFiltre;
     JTextField     inputFilter;
     File[]         fichiersFiltres;
     JTable         table;
+    JScrollPane    containerTable;
     final String[] headers = { "FilenName", "AbsolutePath", "Weight", "Derniere Modif" };
     Object[][]     data;
 
@@ -42,7 +44,7 @@ public class ContainerFiltreView extends Container {
      */
     public void bandeauFiltre() {
 
-        Container bandeauFiltre = new Container();
+        bandeauFiltre = new Container();
         bandeauFiltre.setLayout(new FlowLayout());
 
         bandeauFiltre.add(new JLabel("Saisir les extensions de fichiers : "));
@@ -68,7 +70,10 @@ public class ContainerFiltreView extends Container {
     public void lancerRecherche(IOFileFilter[] tabFiltre) {
 
         mainFrame.getNode().setFilters(tabFiltre);
-        fichiersFiltres = mainFrame.getNode().filter(mainFrame.getNode().getFilePath());
+        //fichiersFiltres = mainFrame.getNode().filter(mainFrame.getNode().getFilePath());
+        mainFrame.getNode().filterValentin(mainFrame.getNode().getFilePath());
+        fichiersFiltres = new File[mainFrame.getNode().getResultFilter().size()];
+        fichiersFiltres = mainFrame.getNode().getResultFilter().toArray(fichiersFiltres);
         System.out.println("Taille array file : " + fichiersFiltres.length);
         this.printFilterResult();
         mainFrame.pack();
@@ -84,6 +89,8 @@ public class ContainerFiltreView extends Container {
      */
     private void printFilterResult() {
 
+        if (containerTable != null)
+            this.remove(containerTable);
         this.computeData();
         table = new JTable(data, headers) {
 
@@ -97,8 +104,8 @@ public class ContainerFiltreView extends Container {
 
         //Toute la ligne est selectionnée
         table.setRowSelectionAllowed(true);
-
-        this.add(new JScrollPane(table), BorderLayout.CENTER);
+        containerTable = new JScrollPane(table);
+        this.add(containerTable, BorderLayout.CENTER);
     }
 
     /**
@@ -118,9 +125,26 @@ public class ContainerFiltreView extends Container {
 
     }
 
-    public void loadFiltreView() {
+    public void removeJTable() {
 
-        this.bandeauFiltre();
+        System.out.println("REmove JTable");
+        if (table != null) {
+            System.out.println("remove OK");
+            this.remove(containerTable);
+        }
+    }
+
+    public void loadFiltreView(boolean forceRefresh) {
+
+        if (this.inputFilter == null) {
+            this.bandeauFiltre();
+        }
+        if (forceRefresh && this.inputFilter != null) {
+            this.remove(bandeauFiltre);
+            this.bandeauFiltre();
+            this.removeJTable();
+        }
+
     }
 
 }

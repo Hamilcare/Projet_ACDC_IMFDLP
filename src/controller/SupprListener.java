@@ -3,16 +3,16 @@ package controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import acdc_imfdlp.ContainerDoublonsView;
+import acdc_imfdlp.ContainerSupressionPossible;
 import utils.Deletor;
 
 public class SupprListener implements KeyListener {
 
-    ContainerDoublonsView vueDoublons;
+    ContainerSupressionPossible container;
 
-    public SupprListener(ContainerDoublonsView vueDoublons) {
+    public SupprListener(ContainerSupressionPossible vueDoublons) {
         super();
-        this.vueDoublons = vueDoublons;
+        this.container = vueDoublons;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class SupprListener implements KeyListener {
 
         if (e.getKeyCode() == KeyEvent.VK_DELETE) {
             System.out.println("suppr");
-            new Deletor(vueDoublons);
+            new Deletor(container);
         }
 
     }

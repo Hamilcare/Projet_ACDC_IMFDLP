@@ -30,10 +30,12 @@ public class Node implements INode, Runnable {
      */
     private DefaultMutableTreeNode             root;
     private File                               filePath;
-    protected HashMap<String, ArrayList<File>> md5Table = new HashMap<>();;
+    protected HashMap<String, ArrayList<File>> md5Table     = new HashMap<>();;
 
     private IOFileFilter[]                     filters;
     private CacheFile                          cacheFile;
+
+    ArrayList<File>                            resultFilter = new ArrayList<>();
 
     /**
      * Constructeur par défaut
@@ -55,6 +57,16 @@ public class Node implements INode, Runnable {
         this.root = root;
         this.filePath = filePath;
         this.md5Table = new HashMap<>();
+    }
+
+    public ArrayList<File> getResultFilter() {
+
+        return resultFilter;
+    }
+
+    public void setResultFilter(ArrayList<File> resultFilter) {
+
+        this.resultFilter = resultFilter;
     }
 
     public IOFileFilter[] getFilters() {
@@ -237,6 +249,20 @@ public class Node implements INode, Runnable {
     public File[] filter(File fileRoot) {
 
         return fileRoot.listFiles((FileFilter) FileFilterUtils.or(filters));
+    }
+
+    public void filterValentin(File fileRoot) {
+
+        File[] tmp = fileRoot.listFiles((FileFilter) FileFilterUtils.or(filters));
+        for (File f : tmp) {
+            if (f.isFile()) {
+                resultFilter.add(f);
+
+            }
+            else
+                filterValentin(f);
+        }
+
     }
 
     /**

@@ -162,6 +162,7 @@ public class MainFrame extends JFrame {
         treeView = new ContainerTreeView(this);
         treeView.refreshTreeView();
         doublonsView = new ContainerDoublonsView(this);
+        filtreView = new ContainerFiltreView(this);
         switch (code) {
             case 0:
                 this.enableTreeView();
@@ -236,7 +237,7 @@ public class MainFrame extends JFrame {
 
     public void enableFiltreView() {
 
-        filtreView.loadFiltreView();
+        filtreView.loadFiltreView(false);
         principal.remove(currentView);
         principal.add(filtreView, BorderLayout.CENTER);
         currentView = filtreView;
@@ -279,6 +280,8 @@ public class MainFrame extends JFrame {
         treeView = new ContainerTreeView(this);
         doublonsView = new ContainerDoublonsView(this);
         doublonsView.loadDoublonsView(true);
+        filtreView = new ContainerFiltreView(this);
+
         this.enableDoublonsView();
     }
 

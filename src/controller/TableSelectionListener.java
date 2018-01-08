@@ -7,10 +7,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import acdc_imfdlp.ContainerDoublonsView;
+import acdc_imfdlp.ContainerSupressionPossible;
 
 public class TableSelectionListener implements ListSelectionListener {
 
-    ContainerDoublonsView vueDoublons;
+    ContainerSupressionPossible vueDoublons;
 
     public TableSelectionListener(ContainerDoublonsView cdv) {
         vueDoublons = cdv;
@@ -20,7 +21,7 @@ public class TableSelectionListener implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent arg0) {
 
         ArrayList<String> selectedData = new ArrayList<>();
-        JTable table = vueDoublons.getTable();
+        JTable table = vueDoublons.table();
         int[] selectedRow = table.getSelectedRows();
 
         for (int i = 0; i < selectedRow.length; i++) {
@@ -31,7 +32,7 @@ public class TableSelectionListener implements ListSelectionListener {
         for (String s : selectedData) {
             System.out.println("row : " + s);
         }
-        vueDoublons.setSelectedFile(selectedData);
+        vueDoublons.setFilePathToDelete(selectedData);
     }
 
 }
