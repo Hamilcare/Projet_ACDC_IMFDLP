@@ -57,6 +57,11 @@ public class Node implements INode, Runnable {
         this.md5Table = new HashMap<>();
     }
 
+    public IOFileFilter[] getFilters() {
+
+        return filters;
+    }
+
     /**
      * Démarrage du Thread
      */

@@ -114,7 +114,7 @@ public class ContainerDoublonsView extends Container {
     public void computeData() {
 
         this.computeDoublons();
-        data = new Object[this.countRows()][3];
+        data = new Object[this.countRows()][headers.length];
         int rowIndex = 0;
         for (Entry<String, ArrayList<File>> entry : doublons.entrySet()) {
             for (File f : entry.getValue()) {
