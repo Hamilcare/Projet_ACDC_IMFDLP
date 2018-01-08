@@ -3,11 +3,12 @@ file=[Main_PROTO.java];hash=[672c7c36223947389ac4a875b088a925];timestamp=[151196
 file=[ContainerTreeView.java];hash=[2f79705bc46e3822325fa0b74ba31e67];timestamp=[1515394602000];*
 file=[FileNode.java];hash=[b40f93def2c8385b212f25e410ff4d13];timestamp=[1515394593000];*
 file=[Node.java];hash=[bb9c9a222e233d6927f4664b9a39316e];timestamp=[1515394602000];*
-file=[ContainerDoublonsView.java];hash=[a75a242e3038be6a1c0036980dc4e6c6];timestamp=[1515394602000];*
-file=[INode.java];hash=[36305702f7807f4de61e50ef4e728393];timestamp=[1515394593000];*
-file=[MainFrame.java];hash=[75f16df92cd0ea8311c948afd3cd6af4];timestamp=[1515400646000];*
-file=[MainFrame.java];hash=[5f2eaf5daba1d1ebb8518adb7e7654aa];timestamp=[1515414219000];*
+file=[Node.java];hash=[4dd7f416888111c52978499e14cacab7];timestamp=[1515442474000];*
+file=[ContainerDoublonsView.java];hash=[72b0fed12fcb15d6b76aa0745532cf8f];timestamp=[1515444936000];*
+file=[INode.java];hash=[b4166e1fe4fbb1430db737811d8b8ce7];timestamp=[1515442474000];*
+file=[MainFrame.java];hash=[0f691cd0095df8be5d74e669995b1170];timestamp=[1515451252000];*
+file=[ContainerPieChartView.java];hash=[7e643f1743abb921c4c01205544b9b93];timestamp=[1515450964000];*
 file=[Main.java];hash=[11506b12198627c850efe6333a52d6f9];timestamp=[1515394602000];*
-file=[ContainerFiltreView.java];hash=[c81135e121579e0aa2f6c1a2715020ef];timestamp=[1515414048000];*
+file=[ContainerFiltreView.java];hash=[52fc95ee15779f4932c62757759a7967];timestamp=[1515444942000];*
 file=[Main_PROTO.form];hash=[f525982e13ff333ed9dd29e4e0dbf6a5];timestamp=[1511964994000];*
 file=[.gitattributes];hash=[bd7ac7fc15f40d7ff247c212c4749537];timestamp=[1511964994000];*

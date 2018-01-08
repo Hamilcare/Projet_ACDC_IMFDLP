@@ -21,190 +21,189 @@ import controller.TableSelectionListener;
  */
 public class ContainerDoublonsView extends Container implements ContainerSupressionPossible {
 
-    private static final long        serialVersionUID = 7553782934445993773L;
+	private static final long serialVersionUID = 7553782934445993773L;
 
-    MainFrame                        mainFrame;
+	MainFrame mainFrame;
 
-    final String[]                   headers          = { "FilenName", "AbsolutePath", "Weight" };
+	final String[] headers = { "Nom", "Chemin", "Poids(octects)" };
 
-    Object[][]                       data;
+	Object[][] data;
 
-    HashMap<String, ArrayList<File>> doublons;
+	HashMap<String, ArrayList<File>> doublons;
 
-    JTable                           table;
+	JTable table;
 
-    Node                             lastNode;
+	Node lastNode;
 
-    ArrayList<String>                selectedFile;
+	ArrayList<String> selectedFile;
 
-    ListSelectionModel               cellSelectionModel;
+	ListSelectionModel cellSelectionModel;
 
-    public ContainerDoublonsView(MainFrame mf) {
-        mainFrame = mf;
-        lastNode = mf.getNode();
-        //this.addKeyListener(new SupprListener());
-        //table.addK
-    }
+	public ContainerDoublonsView(MainFrame mf) {
+		mainFrame = mf;
+		lastNode = mf.getNode();
+		//this.addKeyListener(new SupprListener());
+		//table.addK
+	}
 
-    /**
-     * 
-     * @return la JTable associée
-     */
-    public JTable getTable() {
+	/**
+	 * 
+	 * @return la JTable associée
+	 */
+	public JTable getTable() {
 
-        return table;
-    }
+		return table;
+	}
 
-    /**
-     * 
-     * @return la liste des path des fichiers selectionnes
-     */
-    public ArrayList<String> getSelectedFile() {
+	/**
+	 * 
+	 * @return la liste des path des fichiers selectionnes
+	 */
+	public ArrayList<String> getSelectedFile() {
 
-        return selectedFile;
-    }
+		return selectedFile;
+	}
 
-    /**
-     * 
-     * @param selectedFile
-     *            positionne la liste des path des fichiers selectionnes
-     */
-    public void setSelectedFile(ArrayList<String> selectedFile) {
+	/**
+	 * 
+	 * @param selectedFile
+	 *            positionne la liste des path des fichiers selectionnes
+	 */
+	public void setSelectedFile(ArrayList<String> selectedFile) {
 
-        this.selectedFile = selectedFile;
-    }
+		this.selectedFile = selectedFile;
+	}
 
-    /**
-     * Lance le hash et set le tableau Data
-     * 
-     * @param b
-     */
-    public void loadDoublonsView(boolean forceReload) {
+	/**
+	 * Lance le hash et set le tableau Data
+	 * 
+	 * @param b
+	 */
+	public void loadDoublonsView(boolean forceReload) {
 
-        if (data == null || mainFrame.getNode() != lastNode && !forceReload) {
-            System.out.println("Loading doublons");
-            this.computeData();
-            //table = new JTable(data, headers);
-            //Hack pour rendre la table non editable
-            table = new JTable(data, headers) {
+		if (data == null || mainFrame.getNode() != lastNode && !forceReload) {
+			System.out.println("Loading doublons");
+			this.computeData();
+			//table = new JTable(data, headers);
+			//Hack pour rendre la table non editable
+			table = new JTable(data, headers) {
 
-                private static final long serialVersionUID = 1L;
+				private static final long serialVersionUID = 1L;
 
-                public boolean isCellEditable(int row, int column) {
+				public boolean isCellEditable(int row, int column) {
 
-                    return false;
-                };
-            };
+					return false;
+				};
+			};
 
-            //Toute la ligne est selectionnée
-            table.setRowSelectionAllowed(true);
+			//Toute la ligne est selectionnée
+			table.setRowSelectionAllowed(true);
 
-            table.addKeyListener(new SupprListener(this));
+			table.addKeyListener(new SupprListener(this));
 
-            cellSelectionModel = table.getSelectionModel();
-            cellSelectionModel.addListSelectionListener(new TableSelectionListener(this));
-            this.setLayout(new BorderLayout());
-            this.add(new JScrollPane(table), BorderLayout.CENTER);
-        }
-    }
+			cellSelectionModel = table.getSelectionModel();
+			cellSelectionModel.addListSelectionListener(new TableSelectionListener(this));
+			this.setLayout(new BorderLayout());
+			this.add(new JScrollPane(table), BorderLayout.CENTER);
+		}
+	}
 
-    /**
-     * Remplie le tableau data qui alimentera la JTable présentant les doublons
-     */
-    public void computeData() {
+	/**
+	 * Remplie le tableau data qui alimentera la JTable présentant les doublons
+	 */
+	public void computeData() {
 
-        this.computeDoublons();
-        data = new Object[this.countRows()][headers.length];
-        int rowIndex = 0;
-        for (Entry<String, ArrayList<File>> entry : doublons.entrySet()) {
-            for (File f : entry.getValue()) {
-                data[rowIndex][0] = f.getName();
-                data[rowIndex][1] = f.getAbsolutePath();
-                data[rowIndex][2] = f.length();
-                rowIndex++;
-            }
-            data[rowIndex][0] = "";
-            data[rowIndex][1] = "";
-            data[rowIndex][2] = "";
-            rowIndex++;
-        }
+		this.computeDoublons();
+		data = new Object[this.countRows()][headers.length];
+		int rowIndex = 0;
+		for (Entry<String, ArrayList<File>> entry : doublons.entrySet()) {
+			for (File f : entry.getValue()) {
+				data[rowIndex][0] = f.getName();
+				data[rowIndex][1] = f.getAbsolutePath();
+				data[rowIndex][2] = f.length();
+				rowIndex++;
+			}
+			data[rowIndex][0] = "";
+			data[rowIndex][1] = "";
+			data[rowIndex][2] = "";
+			rowIndex++;
+		}
 
-    }
+	}
 
-    /**
-     * 
-     * @return le nombre de ligne que contiendra le tableau
-     */
-    private int countRows() {
+	/**
+	 * 
+	 * @return le nombre de ligne que contiendra le tableau
+	 */
+	private int countRows() {
 
-        int nbRows = 0;
-        for (Entry<String, ArrayList<File>> entry : doublons.entrySet()) {
-            nbRows = nbRows + entry.getValue().size();
-        }
+		int nbRows = 0;
+		for (Entry<String, ArrayList<File>> entry : doublons.entrySet()) {
+			nbRows = nbRows + entry.getValue().size();
+		}
 
-        nbRows = nbRows + doublons.size() + 1;
+		nbRows = nbRows + doublons.size() + 1;
 
-        return nbRows;
-    }
+		return nbRows;
+	}
 
-    /**
-     * 
-     * @return Une Map contenant uniquement les fichiers en double
-     */
-    public void computeDoublons() {
+	/**
+	 * 
+	 * @return Une Map contenant uniquement les fichiers en double
+	 */
+	public void computeDoublons() {
 
-        HashMap<String, ArrayList<File>> clean = new HashMap<>();
-        try {
-            //Il faut écraser la map précédente ou on aura des lignes en double
-            mainFrame.getNode().md5Table = new HashMap<>();
-            mainFrame.getNode().doublons(mainFrame.getNode().getFilePath());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+		HashMap<String, ArrayList<File>> clean = new HashMap<>();
+		try {
+			//Il faut écraser la map précédente ou on aura des lignes en double
+			mainFrame.getNode().md5Table = new HashMap<>();
+			mainFrame.getNode().doublons(mainFrame.getNode().getFilePath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        for (Entry<String, ArrayList<File>> entry : mainFrame.getNode().getMd5Table().entrySet()) {
-            if (entry.getValue().size() > 1) {
-                clean.put(entry.getKey(), entry.getValue());
-            }
-        }
+		for (Entry<String, ArrayList<File>> entry : mainFrame.getNode().getMd5Table().entrySet()) {
+			if (entry.getValue().size() > 1) {
+				clean.put(entry.getKey(), entry.getValue());
+			}
+		}
 
-        doublons = clean;
+		doublons = clean;
 
-    }
+	}
 
-    public void restartVueDoublons() {
+	public void restartVueDoublons() {
 
-        mainFrame.refreshData(1);
+		mainFrame.refreshData(1);
 
-    }
+	}
 
-    @Override
-    public ArrayList<String> getFilePathToDelete() {
+	@Override
+	public ArrayList<String> getFilePathToDelete() {
 
-        // TODO Auto-generated method stub
-        return getSelectedFile();
-    }
+		// TODO Auto-generated method stub
+		return getSelectedFile();
+	}
 
-    @Override
-    public void restartVue() {
+	@Override
+	public void restartVue() {
 
-        this.restartVueDoublons();
+		this.restartVueDoublons();
 
-    }
+	}
 
-    @Override
-    public void setFilePathToDelete(ArrayList<String> toDelete) {
+	@Override
+	public void setFilePathToDelete(ArrayList<String> toDelete) {
 
-        this.setSelectedFile(toDelete);
+		this.setSelectedFile(toDelete);
 
-    }
+	}
 
-    @Override
-    public JTable table() {
+	@Override
+	public JTable table() {
 
-        return this.getTable();
+		return this.getTable();
 
-    }
+	}
 
 }
