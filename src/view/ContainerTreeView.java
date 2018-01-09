@@ -11,14 +11,24 @@ import controller.MyTreeSelectionListener;
 
 public class ContainerTreeView extends Container {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6552967543421183140L;
+	/**
+	 * référence vers la MainFrame
+	 */
 	MainFrame mainFrame;
+	/**
+	 * référence vers le listener attaché
+	 */
 	MyTreeSelectionListener listener;
+
+	/**
+	 * le splitpane contenant le jtree et le piechart
+	 */
 	JSplitPane splitPane;
 
+	/**
+	 * le contenant du pieChart
+	 */
 	ContainerPieChartView pieChart;
 
 	public ContainerTreeView(MainFrame mf) {
@@ -26,10 +36,12 @@ public class ContainerTreeView extends Container {
 		this.setLayout(new BorderLayout());
 		listener = new MyTreeSelectionListener(mainFrame.getTree(), this);
 		mainFrame.getTree().addTreeSelectionListener(listener);
-		//this.add(new JScrollPane(mainFrame.getTree()), BorderLayout.CENTER);
 		this.addSplitPane();
 	}
 
+	/**
+	 * refresh la vue
+	 */
 	public void refreshTreeView() {
 
 		mainFrame.getTree().removeTreeSelectionListener(listener);
@@ -39,6 +51,9 @@ public class ContainerTreeView extends Container {
 
 	}
 
+	/**
+	 * gère l'ajout du splitPane à la vue
+	 */
 	public void addSplitPane() {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(new JScrollPane(mainFrame.getTree()));
@@ -48,6 +63,9 @@ public class ContainerTreeView extends Container {
 		this.add(splitPane, BorderLayout.CENTER);
 	}
 
+	/**
+	 * gère l'ajout du pieChart au SplitPane
+	 */
 	public void addPieChart() {
 		FileNode fn = new FileNode(mainFrame.getNode().getFilePath());
 		pieChart = new ContainerPieChartView(fn);
@@ -55,6 +73,12 @@ public class ContainerTreeView extends Container {
 
 	}
 
+	/**
+	 * refresh le pieChart
+	 * 
+	 * @param fn
+	 *            le file node à partir duquel le dataset du chart est construit
+	 */
 	public void refreshPieChart(FileNode fn) {
 		pieChart = new ContainerPieChartView(fn);
 		splitPane.setRightComponent(pieChart);

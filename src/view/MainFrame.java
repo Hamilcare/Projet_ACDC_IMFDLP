@@ -25,17 +25,47 @@ import utils.CacheFilter;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -6954342052589521863L;
-
+	/**
+	 * Référence vers la treeView
+	 */
 	ContainerTreeView treeView;
+	/**
+	 * Référence vers la vue des doublons
+	 */
 	ContainerDoublonsView doublonsView;
+	/**
+	 * Référence vers la vue des filtres
+	 */
 	ContainerFiltreView filtreView;
+	/**
+	 * Référence vers le pieChart
+	 */
 	ContainerPieChartView pieChartView;
+	/**
+	 * le container de la vue principale il contient la treeView ou doublonsView ou
+	 * filtreView
+	 */
 	Container principal = this.getContentPane();
+	/**
+	 * référence vers la vue active
+	 */
 	Container currentView;
 
+	/**
+	 * treemodel associé
+	 */
 	private TreeModel treeModel;
+	/**
+	 * Jtree découlant du treemodel
+	 */
 	private JTree tree;
+	/**
+	 * thread se chargeant de créer l'arbre
+	 */
 	private Thread explorer;
+	/**
+	 * la racine de l'arbre
+	 */
 	private Node node;
 
 	private final String NOM_BOUTON_RESTART = "Restart";
@@ -43,6 +73,9 @@ public class MainFrame extends JFrame {
 	private final String NOM_BOUTON_DOUBLONS = "Doublons";
 	private final String NOM_BOUTON_FILTRE = "Filtrer";
 
+	/**
+	 * Initialise la main frame et les vues
+	 */
 	public MainFrame() {
 
 		this.setTitle("IL ME FAUT DE LA PLACE");
@@ -66,34 +99,51 @@ public class MainFrame extends JFrame {
 
 	}
 
+	/**
+	 * positionne le layout
+	 */
 	public void setMainLayout() {
 
 		principal.setLayout(new BorderLayout());
 	}
 
+	/**
+	 * 
+	 * @return pieChartView
+	 */
 	public ContainerPieChartView getPieChartView() {
 		return pieChartView;
 	}
 
+	/**
+	 * 
+	 * @return treeView
+	 */
 	public ContainerTreeView getTreeView() {
 
 		return treeView;
 	}
 
+	/**
+	 * 
+	 * @return doublonsView
+	 */
 	public ContainerDoublonsView getDoublonsView() {
 
 		return doublonsView;
 	}
 
+	/**
+	 * @return la vue active
+	 */
 	public Container getCurrentView() {
 
 		return currentView;
 	}
 
-	/*
-	 * Initialise l'application : 
-	 * -Demande le point de départ de l'arbo
-	 * -Construit l'arbo
+	/**
+	 * Initialise l'application : -Demande le point de départ de l'arbo -Construit
+	 * l'arbo
 	 */
 	public void init() {
 
@@ -123,6 +173,10 @@ public class MainFrame extends JFrame {
 
 	}
 
+	/**
+	 * 
+	 * @return le bandeau avec les boutons
+	 */
 	private Container creerBandeauSuperieur() {
 
 		JPanel bandeauSuperieur = new JPanel();
@@ -147,6 +201,9 @@ public class MainFrame extends JFrame {
 		return bandeauSuperieur;
 	}
 
+	/**
+	 * construit le jtree
+	 */
 	public void buildTree() {
 
 		treeModel = node.treeModel();
@@ -188,13 +245,16 @@ public class MainFrame extends JFrame {
 	public static void main(String[] args) {
 
 		MainFrame fenetre = new MainFrame();
-		fenetre.createCacheFile();
+		fenetre.createCacheDirectory();
 
 		fenetre.setVisible(true);
 
 	}
 
-	public void createCacheFile() {
+	/**
+	 * crée le répertoire de cache si absent
+	 */
+	public void createCacheDirectory() {
 		File theDir = new File("cache");
 
 		// if the directory does not exist, create it
@@ -215,6 +275,9 @@ public class MainFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * @return la treeView
+	 */
 	public ContainerTreeView getContainerTreeView() {
 
 		return treeView;
@@ -225,21 +288,38 @@ public class MainFrame extends JFrame {
 		this.treeView = treeView;
 	}
 
+	/**
+	 * @return le treeModel
+	 */
 	public TreeModel getTreeModel() {
 
 		return treeModel;
 	}
 
+	/**
+	 * positionne treeModel
+	 * 
+	 * @param treeModel
+	 */
 	public void setTreeModel(TreeModel treeModel) {
 
 		this.treeModel = treeModel;
 	}
 
+	/**
+	 * 
+	 * @return getTree
+	 */
 	public JTree getTree() {
 
 		return tree;
 	}
 
+	/**
+	 * position le Jtree
+	 * 
+	 * @param tree
+	 */
 	public void setTree(JTree tree) {
 
 		this.tree = tree;
@@ -255,16 +335,27 @@ public class MainFrame extends JFrame {
 		this.explorer = explorer;
 	}
 
+	/**
+	 * @return node
+	 */
 	public Node getNode() {
 
 		return node;
 	}
 
+	/**
+	 * positionne node
+	 * 
+	 * @param node
+	 */
 	public void setNode(Node node) {
 
 		this.node = node;
 	}
 
+	/**
+	 * passe la vue active sur le pieChart
+	 */
 	public void enablePieChartView() {
 		principal.remove(currentView);
 		principal.add(pieChartView, BorderLayout.CENTER);

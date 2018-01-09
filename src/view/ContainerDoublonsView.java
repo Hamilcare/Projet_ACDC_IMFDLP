@@ -23,28 +23,46 @@ import controller.TableSelectionListener;
 public class ContainerDoublonsView extends Container implements ContainerSupressionPossible {
 
 	private static final long serialVersionUID = 7553782934445993773L;
-
+	/**
+	 * référence vers la MainFrame
+	 */
 	MainFrame mainFrame;
 
+	/**
+	 * en tête des colonnes de la jtable
+	 */
 	final String[] headers = { "Nom", "Chemin", "Poids(octects)" };
 
+	/**
+	 * données de la jtable
+	 */
 	Object[][] data;
 
+	/**
+	 * la liste des doublons
+	 */
 	HashMap<String, ArrayList<File>> doublons;
 
+	/**
+	 * la jtable affichant les doublons
+	 */
 	JTable table;
 
 	Node lastNode;
 
+	/**
+	 * liste des fichiers selectionnés
+	 */
 	ArrayList<String> selectedFile;
 
+	/**
+	 * le type de selection pour la jtable
+	 */
 	ListSelectionModel cellSelectionModel;
 
 	public ContainerDoublonsView(MainFrame mf) {
 		mainFrame = mf;
 		lastNode = mf.getNode();
-		//this.addKeyListener(new SupprListener());
-		//table.addK
 	}
 
 	/**
@@ -173,6 +191,9 @@ public class ContainerDoublonsView extends Container implements ContainerSupress
 
 	}
 
+	/**
+	 * refresh la vue
+	 */
 	public void restartVueDoublons() {
 
 		mainFrame.refreshData(1);

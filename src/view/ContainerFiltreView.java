@@ -23,23 +23,59 @@ import controller.SupprListener;
 import controller.TableSelectionListener;
 import utils.TextPrompt;
 
+/**
+ * Contient la vue filtre
+ * 
+ * @author valentin
+ *
+ */
 public class ContainerFiltreView extends Container implements ContainerSupressionPossible {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5912635172318571302L;
+	/**
+	 * référence vers la MainFrame
+	 */
 	MainFrame mainFrame;
+	/**
+	 * le bandeau contenant les éléments pour entrer les filtres
+	 */
 	Container bandeauFiltre;
+	/**
+	 * le textfield où on entre les filtres
+	 */
 	JTextField inputFilter;
+	/**
+	 * la liste des fichiers résultant de la recherche
+	 */
 	File[] fichiersFiltres;
+	/**
+	 * la table contenant le résultat de la recherche filtrée
+	 */
 	JTable table;
+	/**
+	 * container de la jtable
+	 */
 	JScrollPane containerTable;
+	/**
+	 * en tête des colonnes
+	 */
 	final String[] headers = { "Nom du Fichier", "Chemin", "Poids (octects)", "Date de Derniere Modif" };
+	/**
+	 * données de la jtable
+	 */
 	Object[][] data;
 
+	/**
+	 * type de selection de la jtable
+	 */
 	ListSelectionModel cellSelectionModel;
 
+	/**
+	 * la liste des fichiers à supprimer
+	 */
 	ArrayList<String> selectedFile;
 
 	public ContainerFiltreView(MainFrame mf) {
@@ -48,6 +84,10 @@ public class ContainerFiltreView extends Container implements ContainerSupressio
 
 	}
 
+	/**
+	 * 
+	 * @return le text field contenant les filtres
+	 */
 	public JTextField getInputFilter() {
 
 		return inputFilter;
@@ -170,6 +210,9 @@ public class ContainerFiltreView extends Container implements ContainerSupressio
 
 	}
 
+	/**
+	 * supprime la jtable
+	 */
 	public void removeJTable() {
 
 		System.out.println("REmove JTable");
@@ -179,6 +222,12 @@ public class ContainerFiltreView extends Container implements ContainerSupressio
 		}
 	}
 
+	/**
+	 * charge la vue filtre
+	 * 
+	 * @param forceRefresh
+	 *            vaut true suite à un restart
+	 */
 	public void loadFiltreView(boolean forceRefresh) {
 
 		if (this.inputFilter == null) {
