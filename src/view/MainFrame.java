@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -182,14 +183,37 @@ public class MainFrame extends JFrame {
 		}
 
 		this.pack();
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	}
 
 	public static void main(String[] args) {
 
 		MainFrame fenetre = new MainFrame();
+		fenetre.createCacheFile();
 
 		fenetre.setVisible(true);
 
+	}
+
+	public void createCacheFile() {
+		File theDir = new File("cache");
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+			System.out.println("creating directory: " + theDir.getName());
+			boolean result = false;
+
+			try {
+				theDir.mkdir();
+				result = true;
+			} catch (SecurityException se) {
+				System.out.println("SecurityException" + se);
+			}
+			if (result) {
+				System.out.println("DIR created");
+			}
+
+		}
 	}
 
 	public ContainerTreeView getContainerTreeView() {

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -41,11 +42,12 @@ public class CacheFile {
 	 */
 	protected void formatCacheFileName(String absolutePath) {
 
+		String systemSeparator = FileSystems.getDefault().getSeparator();
 		cacheFileName = absolutePath;
-		cacheFileName = cacheFileName.replaceAll("\\\\", "_");
+		cacheFileName = cacheFileName.replaceAll(systemSeparator, "_");
 		cacheFileName = cacheFileName.replaceAll(":", "");
-		//cacheFileName = "cache//" + cacheFileName + ".cache";
-		cacheFileName = cacheFileName + ".cache";
+		cacheFileName = "." + systemSeparator + "cache" + systemSeparator + cacheFileName + ".cache";
+
 	}
 
 	/**
