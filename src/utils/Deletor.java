@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import acdc_imfdlp.ContainerSupressionPossible;
+import view.ContainerSupressionPossible;
 
 /**
  * Se charge de la supression des fichiers désignés par l'utilisateur

@@ -1,4 +1,4 @@
-package acdc_imfdlp;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -6,6 +6,7 @@ import java.awt.Container;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
+import acdc_imfdlp.FileNode;
 import controller.MyTreeSelectionListener;
 
 public class ContainerTreeView extends Container {

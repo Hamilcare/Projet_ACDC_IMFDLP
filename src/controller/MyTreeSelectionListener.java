@@ -7,8 +7,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import acdc_imfdlp.ContainerTreeView;
 import acdc_imfdlp.FileNode;
+import view.ContainerTreeView;
 
 public class MyTreeSelectionListener implements TreeSelectionListener {
 

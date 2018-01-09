@@ -3,7 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import acdc_imfdlp.MainFrame;
+import view.MainFrame;
 
 public class ButtonArbreListener implements ActionListener {
 

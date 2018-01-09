@@ -6,7 +6,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import acdc_imfdlp.ContainerSupressionPossible;
+import view.ContainerSupressionPossible;
 
 public class TableSelectionListener implements ListSelectionListener {
 

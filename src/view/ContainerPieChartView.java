@@ -1,4 +1,4 @@
-package acdc_imfdlp;
+package view;
 
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
-import view.PieChart_AWT;
+import acdc_imfdlp.FileNode;
 
 public class ContainerPieChartView extends Container {
 

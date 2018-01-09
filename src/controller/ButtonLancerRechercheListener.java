@@ -8,7 +8,7 @@ import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
-import acdc_imfdlp.ContainerFiltreView;
+import view.ContainerFiltreView;
 
 public class ButtonLancerRechercheListener implements ActionListener {
 

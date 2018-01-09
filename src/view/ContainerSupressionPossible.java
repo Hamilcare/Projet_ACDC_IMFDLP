@@ -1,4 +1,4 @@
-package acdc_imfdlp;
+package view;
 
 import java.util.ArrayList;
 

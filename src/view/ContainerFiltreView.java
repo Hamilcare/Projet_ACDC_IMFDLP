@@ -1,4 +1,4 @@
-package acdc_imfdlp;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -114,11 +113,8 @@ public class ContainerFiltreView extends Container implements ContainerSupressio
 				case 2:
 					return Long.class;
 				case 3:
-					return Date.class;
-				case 4:
-					return String.class;
-				case 5:
-					return Icon.class;
+					return java.util.Date.class;
+
 				default:
 					return String.class;
 				}

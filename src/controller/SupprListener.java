@@ -3,8 +3,8 @@ package controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import acdc_imfdlp.ContainerSupressionPossible;
 import utils.Deletor;
+import view.ContainerSupressionPossible;
 
 public class SupprListener implements KeyListener {
 

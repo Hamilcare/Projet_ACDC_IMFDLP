@@ -1,4 +1,4 @@
-package acdc_imfdlp;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -14,10 +14,10 @@ import javax.swing.tree.TreeModel;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
+import acdc_imfdlp.Node;
 import controller.ButtonArbreListener;
 import controller.ButtonDoublonsLister;
 import controller.ButtonFiltreListener;
-import controller.ButtonPieChartListener;
 import controller.ButtonStartListener;
 import utils.CacheFilter;
 
@@ -143,10 +143,6 @@ public class MainFrame extends JFrame {
 		JButton boutonVueFiltre = new JButton(NOM_BOUTON_FILTRE);
 		boutonVueFiltre.addActionListener(new ButtonFiltreListener(this));
 		bandeauSuperieur.add(boutonVueFiltre);
-
-		JButton boutonPieChart = new JButton(NOM_BOUTON_PIE);
-		boutonPieChart.addActionListener(new ButtonPieChartListener(this));
-		bandeauSuperieur.add(boutonPieChart);
 
 		return bandeauSuperieur;
 	}

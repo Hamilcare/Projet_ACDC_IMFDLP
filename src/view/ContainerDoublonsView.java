@@ -1,4 +1,4 @@
-package acdc_imfdlp;
+package view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
+import acdc_imfdlp.Node;
 import controller.SupprListener;
 import controller.TableSelectionListener;
 
@@ -156,7 +157,7 @@ public class ContainerDoublonsView extends Container implements ContainerSupress
 		HashMap<String, ArrayList<File>> clean = new HashMap<>();
 		try {
 			//Il faut écraser la map précédente ou on aura des lignes en double
-			mainFrame.getNode().md5Table = new HashMap<>();
+			mainFrame.getNode().setMd5Table(new HashMap<>());
 			mainFrame.getNode().doublons(mainFrame.getNode().getFilePath());
 		} catch (IOException e) {
 			e.printStackTrace();
