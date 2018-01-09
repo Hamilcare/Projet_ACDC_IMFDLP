@@ -172,7 +172,6 @@ public class MainFrame extends JFrame {
 		this.buildTree();
 
 		treeView = new ContainerTreeView(this);
-		treeView.refreshTreeView();
 		doublonsView = new ContainerDoublonsView(this);
 		filtreView = new ContainerFiltreView(this);
 		switch (code) {
