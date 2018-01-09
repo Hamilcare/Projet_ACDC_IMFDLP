@@ -38,4 +38,9 @@ public class ContainerPieChartView extends Container {
 		this.add(pieChart);
 	}
 
+	public ContainerPieChartView(FileNode fn) {
+		dataset = this.createDataset();
+		//pieChart = new PieChart_AWT("Répartition taille", n)
+	}
+
 }

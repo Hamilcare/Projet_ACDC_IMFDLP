@@ -52,10 +52,11 @@ public class MainFrame extends JFrame {
 		this.init();//Initialise le node
 		this.buildTree();//Construit l'arbre
 
+		pieChartView = new ContainerPieChartView(this);//Est une dépendance de treeView
 		treeView = new ContainerTreeView(this);
 		doublonsView = new ContainerDoublonsView(this);
 		filtreView = new ContainerFiltreView(this);
-		pieChartView = new ContainerPieChartView(this);
+		//pieChartView = new ContainerPieChartView(this);
 
 		currentView = treeView;
 		principal.add(creerBandeauSuperieur(), BorderLayout.NORTH);
@@ -68,6 +69,10 @@ public class MainFrame extends JFrame {
 	public void setMainLayout() {
 
 		principal.setLayout(new BorderLayout());
+	}
+
+	public ContainerPieChartView getPieChartView() {
+		return pieChartView;
 	}
 
 	public ContainerTreeView getTreeView() {

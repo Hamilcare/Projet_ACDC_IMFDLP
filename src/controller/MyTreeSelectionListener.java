@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.File;
+
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -9,27 +11,32 @@ import acdc_imfdlp.FileNode;
 
 public class MyTreeSelectionListener implements TreeSelectionListener {
 
-    JTree tree;
+	JTree tree;
 
-    public MyTreeSelectionListener(JTree t) {
-        tree = t;
-    }
+	public MyTreeSelectionListener(JTree t) {
+		tree = t;
+	}
 
-    @Override
-    public void valueChanged(TreeSelectionEvent e) {
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
 
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 
-        /* if nothing is selected */
-        if (node == null)
-            return;
+		/* if nothing is selected */
+		if (node == null)
+			return;
 
-        /* retrieve the node that was selected */
-        FileNode nodeInfo = (FileNode) node.getUserObject();
+		/* retrieve the node that was selected */
+		FileNode nodeInfo;
+		try {
+			nodeInfo = (FileNode) node.getUserObject();
+		} catch (Exception except) {
+			nodeInfo = new FileNode((File) node.getUserObject());
+		}
 
-        /* React to the node selection. */
-        System.out.println("Selected Node : " + nodeInfo.toString());
+		/* React to the node selection. */
+		System.out.println("Selected Node : " + nodeInfo.toString());
 
-    }
+	}
 
 }
