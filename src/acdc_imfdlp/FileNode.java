@@ -20,11 +20,18 @@ public class FileNode {
 	 */
 	private long taille;
 
+	public File getFile() {
+		return file;
+	}
+
 	/**
 	 * 
 	 * @return taille
 	 */
 	public long getTaille() {
+		System.out.println("Appel getTaille sur " + file.getName());
+		if (taille == 0L)
+			this.setTaille();
 		return taille;
 	}
 
@@ -37,14 +44,16 @@ public class FileNode {
 	}
 
 	public static long computeFileSize(File currentFile, long currentComputedSize) {
-		if (currentFile.isFile()) {
-			return currentFile.length();
-		} else {
+		System.out.println(currentFile.getName());
+		System.out.println(currentFile.isDirectory());
+		if (currentFile.isDirectory()) {
 			long size = 0;
 			for (File f : currentFile.listFiles()) {
 				size = size + computeFileSize(f, size);
 			}
 			return size;
+		} else {
+			return currentFile.length();
 		}
 	}
 

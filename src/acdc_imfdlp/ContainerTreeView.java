@@ -14,10 +14,12 @@ public class ContainerTreeView extends Container {
 	MyTreeSelectionListener listener;
 	JSplitPane splitPane;
 
+	ContainerPieChartView pieChart;
+
 	public ContainerTreeView(MainFrame mf) {
 		mainFrame = mf;
 		this.setLayout(new BorderLayout());
-		listener = new MyTreeSelectionListener(mainFrame.getTree());
+		listener = new MyTreeSelectionListener(mainFrame.getTree(), this);
 		mainFrame.getTree().addTreeSelectionListener(listener);
 		//this.add(new JScrollPane(mainFrame.getTree()), BorderLayout.CENTER);
 		this.addSplitPane();
@@ -26,7 +28,7 @@ public class ContainerTreeView extends Container {
 	public void refreshTreeView() {
 
 		mainFrame.getTree().removeTreeSelectionListener(listener);
-		listener = new MyTreeSelectionListener(mainFrame.getTree());
+		listener = new MyTreeSelectionListener(mainFrame.getTree(), this);
 		mainFrame.getTree().addTreeSelectionListener(listener);
 		this.add(new JScrollPane(mainFrame.getTree()), BorderLayout.CENTER);
 
@@ -35,9 +37,22 @@ public class ContainerTreeView extends Container {
 	public void addSplitPane() {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(new JScrollPane(mainFrame.getTree()));
-		splitPane.setRightComponent(mainFrame.getPieChartView());
+		//splitPane.setRightComponent(mainFrame.getPieChartView());
+		this.addPieChart();
 		//splitPane.getLeftComponent().setMinimumSize(new Dimension(100, 100));
 		this.add(splitPane, BorderLayout.CENTER);
+	}
+
+	public void addPieChart() {
+		FileNode fn = new FileNode(mainFrame.getNode().getFilePath());
+		pieChart = new ContainerPieChartView(fn);
+		splitPane.setRightComponent(pieChart);
+
+	}
+
+	public void refreshPieChart(FileNode fn) {
+		pieChart = new ContainerPieChartView(fn);
+		splitPane.setRightComponent(pieChart);
 	}
 
 }

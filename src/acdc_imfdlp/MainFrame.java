@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
 		this.init();//Initialise le node
 		this.buildTree();//Construit l'arbre
 
-		pieChartView = new ContainerPieChartView(this);//Est une dépendance de treeView
+		//pieChartView = new ContainerPieChartView(this.getTreeModel().getRoot().get);//Est une dépendance de treeView
 		treeView = new ContainerTreeView(this);
 		doublonsView = new ContainerDoublonsView(this);
 		filtreView = new ContainerFiltreView(this);

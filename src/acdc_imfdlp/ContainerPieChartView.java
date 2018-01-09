@@ -27,20 +27,10 @@ public class ContainerPieChartView extends Container {
 		return dataset;
 	}
 
-	public ContainerPieChartView(MainFrame mf) {
-		mainFrame = mf;
-		dataset = this.createDataset();
-		pieChart = new PieChart_AWT("Répartition taille", mainFrame.getNode()).createDemoPanel();
-		pieChart.setSize(560, 367);
-		//pieChart.setVisible(true);
-		this.add(pieChart);
-		this.add(pieChart);
-		this.add(pieChart);
-	}
-
 	public ContainerPieChartView(FileNode fn) {
 		dataset = this.createDataset();
-		//pieChart = new PieChart_AWT("Répartition taille", n)
+		pieChart = new PieChart_AWT("Répartition taille", fn).createDemoPanel();
+		this.add(pieChart);
 	}
 
 }

@@ -7,14 +7,17 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import acdc_imfdlp.ContainerTreeView;
 import acdc_imfdlp.FileNode;
 
 public class MyTreeSelectionListener implements TreeSelectionListener {
 
 	JTree tree;
+	ContainerTreeView treeView;
 
-	public MyTreeSelectionListener(JTree t) {
+	public MyTreeSelectionListener(JTree t, ContainerTreeView tv) {
 		tree = t;
+		treeView = tv;
 	}
 
 	@Override
@@ -36,6 +39,7 @@ public class MyTreeSelectionListener implements TreeSelectionListener {
 
 		/* React to the node selection. */
 		System.out.println("Selected Node : " + nodeInfo.toString());
+		treeView.refreshPieChart(nodeInfo);
 
 	}
 

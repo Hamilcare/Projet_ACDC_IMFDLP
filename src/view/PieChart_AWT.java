@@ -11,7 +11,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.ApplicationFrame;
 
-import acdc_imfdlp.Node;
+import acdc_imfdlp.FileNode;
 import utils.FileSizeComputer;
 
 /**
@@ -20,13 +20,13 @@ import utils.FileSizeComputer;
  *
  */
 public class PieChart_AWT extends ApplicationFrame {
-	Node n;
+	FileNode n;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public PieChart_AWT(String title, Node n) {
+	public PieChart_AWT(String title, FileNode n) {
 		super(title);
 		this.n = n;
 		setContentPane(createDemoPanel());
@@ -43,8 +43,12 @@ public class PieChart_AWT extends ApplicationFrame {
 
 	private PieDataset computeDataset() {
 		DefaultPieDataset dataset = new DefaultPieDataset();
-		for (File f : n.getFilePath().listFiles()) {
-			dataset.setValue(f.getName(), FileSizeComputer.computeFileSize(f, 0));
+		if (n.getFile().isDirectory()) {
+			for (File f : n.getFile().listFiles()) {
+				dataset.setValue(f.getName(), FileSizeComputer.computeFileSize(f, 0));
+			}
+		} else {
+			dataset.setValue(n.getFile().getName(), n.getFile().length());
 		}
 		return dataset;
 
