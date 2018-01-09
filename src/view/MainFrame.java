@@ -42,7 +42,6 @@ public class MainFrame extends JFrame {
 	private final String NOM_BOUTTON_ARBRE = "Arbre";
 	private final String NOM_BOUTON_DOUBLONS = "Doublons";
 	private final String NOM_BOUTON_FILTRE = "Filtrer";
-	private final String NOM_BOUTON_PIE = "Diagramme Circulaire";
 
 	public MainFrame() {
 

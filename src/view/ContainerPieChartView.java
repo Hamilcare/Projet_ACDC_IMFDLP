@@ -12,10 +12,12 @@ import acdc_imfdlp.FileNode;
 
 public class ContainerPieChartView extends Container {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5817385041667820252L;
 	MainFrame mainFrame;
 	JPanel pieChart;
-
-	private PieDataset dataset;
 
 	private PieDataset createDataset() {
 		this.setLayout(new GridLayout(1, 3));
@@ -28,7 +30,7 @@ public class ContainerPieChartView extends Container {
 	}
 
 	public ContainerPieChartView(FileNode fn) {
-		dataset = this.createDataset();
+		this.createDataset();
 		pieChart = new PieChart_AWT("Répartition taille", fn).createDemoPanel();
 		this.add(pieChart);
 	}

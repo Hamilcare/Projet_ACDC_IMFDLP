@@ -11,6 +11,10 @@ import controller.MyTreeSelectionListener;
 
 public class ContainerTreeView extends Container {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6552967543421183140L;
 	MainFrame mainFrame;
 	MyTreeSelectionListener listener;
 	JSplitPane splitPane;

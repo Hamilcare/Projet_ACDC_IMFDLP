@@ -18,52 +18,55 @@ import view.ContainerSupressionPossible;
  */
 public class Deletor extends JFrame {
 
-    ContainerSupressionPossible vueDoublons;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -328669542472752712L;
+	ContainerSupressionPossible vueDoublons;
 
-    public Deletor(ContainerSupressionPossible cdb) {
-        vueDoublons = cdb;
-        this.setTitle("Confirmez supression");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        String listeDesPaths = this.formatArray();
-        String message = "Etes vous sur de vouloir supprimer les fichiers suivants : \n" + listeDesPaths;
-        int choix = JOptionPane.showConfirmDialog(this, message, "lol", JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-        switch (choix) {
-            case JOptionPane.YES_OPTION:
-                System.out.println("Following files will be deleted: \n" + listeDesPaths);
-                this.deleteFiles();
-            default:
-                break;
-        }
+	public Deletor(ContainerSupressionPossible cdb) {
+		vueDoublons = cdb;
+		this.setTitle("Confirmez supression");
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		String listeDesPaths = this.formatArray();
+		String message = "Etes vous sur de vouloir supprimer les fichiers suivants : \n" + listeDesPaths;
+		int choix = JOptionPane.showConfirmDialog(this, message, "lol", JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+		switch (choix) {
+		case JOptionPane.YES_OPTION:
+			System.out.println("Following files will be deleted: \n" + listeDesPaths);
+			this.deleteFiles();
+		default:
+			break;
+		}
 
-    }
+	}
 
-    private String formatArray() {
+	private String formatArray() {
 
-        ArrayList<String> pathToDelete = vueDoublons.getFilePathToDelete();
-        StringBuilder sb = new StringBuilder();
-        for (String s : pathToDelete) {
-            sb.append(s).append("\n");
-        }
-        return sb.toString();
-    }
+		ArrayList<String> pathToDelete = vueDoublons.getFilePathToDelete();
+		StringBuilder sb = new StringBuilder();
+		for (String s : pathToDelete) {
+			sb.append(s).append("\n");
+		}
+		return sb.toString();
+	}
 
-    /**
-     * Delete selected files
-     */
-    public void deleteFiles() {
+	/**
+	 * Delete selected files
+	 */
+	public void deleteFiles() {
 
-        ArrayList<String> pathToDelete = vueDoublons.getFilePathToDelete();
-        for (String s : pathToDelete) {
-            try {
-                Files.deleteIfExists(Paths.get(s));
-            }
-            catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        vueDoublons.restartVue();
-    }
+		ArrayList<String> pathToDelete = vueDoublons.getFilePathToDelete();
+		for (String s : pathToDelete) {
+			try {
+				Files.deleteIfExists(Paths.get(s));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		vueDoublons.restartVue();
+	}
 
 }

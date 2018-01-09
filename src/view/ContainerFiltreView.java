@@ -25,6 +25,10 @@ import utils.TextPrompt;
 
 public class ContainerFiltreView extends Container implements ContainerSupressionPossible {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5912635172318571302L;
 	MainFrame mainFrame;
 	Container bandeauFiltre;
 	JTextField inputFilter;
@@ -103,6 +107,11 @@ public class ContainerFiltreView extends Container implements ContainerSupressio
 			this.remove(containerTable);
 		this.computeData();
 		DefaultTableModel model = new DefaultTableModel(data, headers) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -7625969081019988414L;
+
 			@Override
 			public Class<?> getColumnClass(int colNum) {
 				switch (colNum) {
