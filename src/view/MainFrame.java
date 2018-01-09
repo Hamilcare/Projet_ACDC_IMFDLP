@@ -38,10 +38,6 @@ public class MainFrame extends JFrame {
 	 */
 	ContainerFiltreView filtreView;
 	/**
-	 * Référence vers le pieChart
-	 */
-	ContainerPieChartView pieChartView;
-	/**
 	 * le container de la vue principale il contient la treeView ou doublonsView ou
 	 * filtreView
 	 */
@@ -105,14 +101,6 @@ public class MainFrame extends JFrame {
 	public void setMainLayout() {
 
 		principal.setLayout(new BorderLayout());
-	}
-
-	/**
-	 * 
-	 * @return pieChartView
-	 */
-	public ContainerPieChartView getPieChartView() {
-		return pieChartView;
 	}
 
 	/**
@@ -351,18 +339,6 @@ public class MainFrame extends JFrame {
 	public void setNode(Node node) {
 
 		this.node = node;
-	}
-
-	/**
-	 * passe la vue active sur le pieChart
-	 */
-	public void enablePieChartView() {
-		principal.remove(currentView);
-		principal.add(pieChartView, BorderLayout.CENTER);
-		currentView = pieChartView;
-		this.pack();
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		System.out.println("currentView : " + currentView);
 	}
 
 	/**
