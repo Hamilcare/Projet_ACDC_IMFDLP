@@ -46,7 +46,8 @@ public class CacheFile {
 		cacheFileName = absolutePath;
 		cacheFileName = cacheFileName.replaceAll(systemSeparator, "_");
 		cacheFileName = cacheFileName.replaceAll(":", "");
-		cacheFileName = "." + systemSeparator + "cache" + systemSeparator + cacheFileName + ".cache";
+		//cacheFileName = "." + systemSeparator + "cache" + systemSeparator + cacheFileName + ".cache";
+		cacheFileName = "cache" + systemSeparator + cacheFileName;
 
 	}
 
@@ -99,6 +100,7 @@ public class CacheFile {
 		StringBuilder inputBuffer = new StringBuilder();
 
 		File cache = new File(getCacheFileName());
+		System.out.println(cache.getAbsolutePath());
 		List<String> lines = FileUtils.readLines(cache);
 		for (String line : lines) {
 

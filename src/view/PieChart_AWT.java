@@ -45,7 +45,9 @@ public class PieChart_AWT extends ApplicationFrame {
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		if (n.getFile().isDirectory()) {
 			for (File f : n.getFile().listFiles()) {
+
 				dataset.setValue(f.getName(), FileSizeComputer.computeFileSize(f, 0));
+
 			}
 		} else {
 			dataset.setValue(n.getFile().getName(), n.getFile().length());
@@ -58,8 +60,8 @@ public class PieChart_AWT extends ApplicationFrame {
 
 		JFreeChart chart = ChartFactory.createPieChart("Repartition taille", // chart title 
 				dataset, // data    
-				true, // include legend   
-				true, false);
+				false, // include legend   
+				false, false);
 
 		return chart;
 	}
