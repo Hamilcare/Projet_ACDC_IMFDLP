@@ -100,7 +100,7 @@ public class CacheFile {
 		StringBuilder inputBuffer = new StringBuilder();
 
 		File cache = new File(getCacheFileName());
-		System.out.println(cache.getAbsolutePath());
+		//System.out.println(cache.getAbsolutePath());
 		List<String> lines = FileUtils.readLines(cache);
 		for (String line : lines) {
 

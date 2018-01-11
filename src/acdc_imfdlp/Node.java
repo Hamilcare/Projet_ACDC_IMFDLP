@@ -154,7 +154,11 @@ public class Node implements INode, Runnable {
 
 		for (File file : files) {
 			if (file.isDirectory() && file.list().length > 0) {
-				doublons(file);
+				try {
+					doublons(file);
+				} catch (Exception e) {
+					System.out.println(e);
+				}
 			} else if (file.isFile()) {
 				md5 = hash(file);
 				if (!cache.exists()) {
